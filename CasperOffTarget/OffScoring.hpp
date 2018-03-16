@@ -16,7 +16,7 @@
 class OffScoring {
 public:
     OffScoring();
-    generateScore();
+    double generateScore();
 private:
     
 };
