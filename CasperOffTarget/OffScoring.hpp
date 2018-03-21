@@ -16,8 +16,21 @@
 class OffScoring {
 public:
     OffScoring();
+    void run(std::string);
+    
+    void output_off_target_data();
+private:
     double generateScore();
 private:
+    // Structure that stores all the off-target information ready for printing
+    struct ScoreInfo {
+        std::string ref_sequence;
+        std::vector<std::string> off_sequences;
+        std::vector<double> scores;
+    };
+private:
+    FILE *stream;
+    
     
 };
 

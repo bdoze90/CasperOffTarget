@@ -10,6 +10,8 @@
 		04BE428A2051A57800CD2118 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42892051A57800CD2118 /* main.cpp */; };
 		04BE42922051AA6F00CD2118 /* csprRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42902051AA6F00CD2118 /* csprRead.cpp */; };
 		04BE4295205C266000CD2118 /* OffScoring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE4293205C266000CD2118 /* OffScoring.cpp */; };
+		04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BECB00205C9660005B6DA7 /* RefSequences.cpp */; };
+		04BECB0520605374005B6DA7 /* gRNA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BECB0320605374005B6DA7 /* gRNA.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +33,10 @@
 		04BE42912051AA6F00CD2118 /* csprRead.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = csprRead.hpp; sourceTree = "<group>"; };
 		04BE4293205C266000CD2118 /* OffScoring.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OffScoring.cpp; sourceTree = "<group>"; };
 		04BE4294205C266000CD2118 /* OffScoring.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OffScoring.hpp; sourceTree = "<group>"; };
+		04BECB00205C9660005B6DA7 /* RefSequences.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RefSequences.cpp; sourceTree = "<group>"; };
+		04BECB01205C9660005B6DA7 /* RefSequences.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RefSequences.hpp; sourceTree = "<group>"; };
+		04BECB0320605374005B6DA7 /* gRNA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gRNA.cpp; sourceTree = "<group>"; };
+		04BECB0420605374005B6DA7 /* gRNA.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = gRNA.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,10 @@
 				04BE42912051AA6F00CD2118 /* csprRead.hpp */,
 				04BE4293205C266000CD2118 /* OffScoring.cpp */,
 				04BE4294205C266000CD2118 /* OffScoring.hpp */,
+				04BECB00205C9660005B6DA7 /* RefSequences.cpp */,
+				04BECB01205C9660005B6DA7 /* RefSequences.hpp */,
+				04BECB0320605374005B6DA7 /* gRNA.cpp */,
+				04BECB0420605374005B6DA7 /* gRNA.hpp */,
 			);
 			path = CasperOffTarget;
 			sourceTree = "<group>";
@@ -131,6 +141,8 @@
 			files = (
 				04BE428A2051A57800CD2118 /* main.cpp in Sources */,
 				04BE4295205C266000CD2118 /* OffScoring.cpp in Sources */,
+				04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */,
+				04BECB0520605374005B6DA7 /* gRNA.cpp in Sources */,
 				04BE42922051AA6F00CD2118 /* csprRead.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

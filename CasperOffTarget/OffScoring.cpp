@@ -13,3 +13,6 @@
 #include <sstream>
 
 
+void OffScoring::run(std::string comp) {
+    std::cout << "Test run for sequence " + comp + "\n";
+}
