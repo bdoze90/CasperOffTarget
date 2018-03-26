@@ -13,20 +13,36 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <stdlib.h>
+#include <stdio.h>
 #include "csprRead.hpp"
+#include "gRNA.hpp"
 
 class OnTargets {
 public:
-    OnTargets(bool, std::string, csprRead&);
+    void loadRef(csprRead* c) {ref = c;}
     
-    std::vector<std::vector<std::string>> ref_seq_buckets;
+    void readInFromFile(std::string);
+    void set_base_seqs(std::vector<gRNA*> x) {base_seqs = x;}
+    
+    void run_off_algorithm();
+    
 private:
-    void parseSequences();
-    void readSequencesFromCspr(csprRead&);
-    void readSequencesFromFile(std::string);
+    struct gRNA_short {
+        gRNA* base;
+        std::vector<std::string> hit;
+        std::vector<int> chromscaff;
+        std::vector<std::string> loc;
+    };
+    void findSimilars(gRNA*);
+    std::vector<gRNA_short> preprocessed_seqs;
+    void generateScore();
+    
 private:
     FILE* stream;
     std::string filename;
+    csprRead* ref;
+    std::vector<gRNA*> base_seqs;
 };
 
 #endif /* RefSequences_hpp */

@@ -12,20 +12,14 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include "gRNA.hpp"
 
 class csprRead {
 public:
-    csprRead();
     void setFile(std::string name) {filename = name;}
     void loadTargets();
-    // Method of storage for individual targets
-    struct grna_shorts {
-        std::string position;
-        std::string sequence;
-        std::string score;
-    };
     //Accessible storage container for all the targets in the genome/assembly by chromosome/scaffold
-    std::vector<std::vector<grna_shorts*>> Targets;
+    std::vector<std::vector<gRNA*>> Targets;
 private:
     void openFile();
     bool newLine();

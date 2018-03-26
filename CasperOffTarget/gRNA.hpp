@@ -16,12 +16,23 @@
 
 class gRNA {
 public:
-    gRNA();
-    long get_location();
-    int get_chromscaff();
-    std::string get_comp_seq();
+    // setting information:
+    void set_location(std::string s) { compressed_location = s;}
+    void set_score(std::string s) { compressed_score = s;}
+    void set_seq(std::string s) {compressed_seq = s;}
+    void set_multiflag(bool b) {multiflag = b;}
+    // retrieving information:
+    std::string get_location();
+    int get_score();
+    std::string get_sequence();
+    std::string gcs() {return compressed_seq;}
+    bool get_multiflag() {return multiflag;}
+    
 private:
-    int 
+    std::string compressed_location;
+    std::string compressed_score;
+    std::string compressed_seq;
+    bool multiflag;
 };
 
 #endif /* gRNA_hpp */
