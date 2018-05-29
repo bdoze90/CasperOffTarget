@@ -26,7 +26,7 @@ void OnTargets::run_off_algorithm() {
     /*for (int i=0;i<base.size();i++) {
         findSimilars(base[i]);
     }*/
-    /* Run 12 threads to get through all of the gRNAs in question */
+    /* Run 16 threads to get through all of the gRNAs in question */
     for (int i=0;i<base.size();i+=4) {
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {

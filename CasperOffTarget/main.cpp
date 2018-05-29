@@ -14,6 +14,10 @@
 #include "RefSequences.hpp"
 #include "gRNA.hpp"
 
+/* NOTE:  Connect this to a python overlay in order to run a subprocess.  That way you can call on the CASPER_Seq_Finder for any off-target NAG sequences if needed.
+ * The NAG sequences don't have to be stored, just temporarily generated and scanned.  If there are multiple sequences to be checked then it can be stored.
+ * Algorithm for NAGs: store them in files for common organisms and endonuclease combinations.  Otherwise just scan the genome for potential off targets irrespective of PAM.
+ */
 
 //int argc, const char * argv[]
 int main() {

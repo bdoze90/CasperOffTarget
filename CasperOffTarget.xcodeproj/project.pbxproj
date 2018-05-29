@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04A347EC20BDD0D100DEFA7A /* OffScoring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */; };
 		04BE428A2051A57800CD2118 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42892051A57800CD2118 /* main.cpp */; };
 		04BE42922051AA6F00CD2118 /* csprRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42902051AA6F00CD2118 /* csprRead.cpp */; };
 		04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BECB00205C9660005B6DA7 /* RefSequences.cpp */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OffScoring.cpp; sourceTree = "<group>"; };
+		04A347EB20BDD0D100DEFA7A /* OffScoring.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OffScoring.hpp; sourceTree = "<group>"; };
 		04BE42862051A57800CD2118 /* CasperOffTarget */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CasperOffTarget; sourceTree = BUILT_PRODUCTS_DIR; };
 		04BE42892051A57800CD2118 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		04BE42902051AA6F00CD2118 /* csprRead.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = csprRead.cpp; sourceTree = "<group>"; };
@@ -73,6 +76,8 @@
 				04BECB01205C9660005B6DA7 /* RefSequences.hpp */,
 				04BECB0320605374005B6DA7 /* gRNA.cpp */,
 				04BECB0420605374005B6DA7 /* gRNA.hpp */,
+				04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */,
+				04A347EB20BDD0D100DEFA7A /* OffScoring.hpp */,
 			);
 			path = CasperOffTarget;
 			sourceTree = "<group>";
@@ -136,6 +141,7 @@
 			files = (
 				04BE428A2051A57800CD2118 /* main.cpp in Sources */,
 				04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */,
+				04A347EC20BDD0D100DEFA7A /* OffScoring.cpp in Sources */,
 				04BECB0520605374005B6DA7 /* gRNA.cpp in Sources */,
 				04BE42922051AA6F00CD2118 /* csprRead.cpp in Sources */,
 			);

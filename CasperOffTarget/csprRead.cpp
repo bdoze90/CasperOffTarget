@@ -17,6 +17,10 @@
 #include <algorithm>
 #include <iterator>
 
+csprRead::csprRead() {
+    LoadRefTargets();
+}
+
 void csprRead::openFile()
 {
     stream = fopen( filename.c_str(), "r");
@@ -44,8 +48,17 @@ void csprRead::closeFile()
     if(stream) fclose( stream);
 }
 
-/* Iterates through the entire .cspr file and downloads all the targets */
-void csprRead::loadTargets() {
+/* Iterates through the file containing the targets of interest and downloads all the targets */
+void csprRead::loadTargets(std::string f) {
+    FILE* mystream;
+    mystream = fopen( f.c_str(), "r");
+    assert(mystream);
+    // run through file with all the targets.  These should be preprocessed in python wrapper to be compressed sequences
+    fclose(mystream);
+}
+
+/* This function loads the reference targets. This is the import function for the .cspr file that is used as a reference */
+void csprRead::LoadRefTargets() {
     openFile();
     std::string junkfirst = getLine(50); // skips the first chromosome indicator
     std::vector<gRNA*> curset;
@@ -59,7 +72,7 @@ void csprRead::loadTargets() {
             std::cout << "Reached Repeats section. Moving on to process repeat structure.\n";
             processMultis();
             break;
-        //Determine whether the new line sets the start of a new Chromosome/Scaffold:
+            //Determine whether the new line sets the start of a new Chromosome/Scaffold:
         } else if (line.find("CHROMOSOME") != std::string::npos) {
             Targets.push_back(curset);
             curset.clear();

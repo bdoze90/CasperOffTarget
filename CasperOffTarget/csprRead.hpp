@@ -16,16 +16,22 @@
 
 class csprRead {
 public:
+    csprRead();
     void setFile(std::string name) {filename = name;}
-    void loadTargets();
+    void loadTargets(std::string);
     //Accessible storage container for all the targets in the genome/assembly by chromosome/scaffold
-    std::vector<std::vector<gRNA*>> Targets;
+    std::vector<std::vector<gRNA*>> TargetQuery;
+    //Base info from the .cspr file
+    std::string reftargets;
+    std::vector<long> locs;
+    std::vector<int> scores;
 private:
     void openFile();
     bool newLine();
     std::string getLine(int);
     void closeFile();
     void processMultis();
+    void LoadRefTargets();
     std::vector<std::string> Msplit(const std::string &text, char sep);
 private:  // Private machinery for parsing the file
     FILE* stream;
