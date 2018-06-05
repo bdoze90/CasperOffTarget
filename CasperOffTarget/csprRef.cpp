@@ -6,7 +6,7 @@
 //  Copyright © 2018 University of Tennessee. All rights reserved.
 //
 
-#include "csprRead.hpp"
+#include "csprRef.hpp"
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -17,17 +17,17 @@
 #include <algorithm>
 #include <iterator>
 
-csprRead::csprRead() {
+csprRef::csprRef() {
     LoadRefTargets();
 }
 
-void csprRead::openFile()
+void csprRef::openFile()
 {
     stream = fopen( filename.c_str(), "r");
     assert(stream);
 }
 
-bool csprRead::newLine()
+bool csprRef::newLine()
 {
     if (feof(stream) == 0) return true;
     return false;
@@ -35,7 +35,7 @@ bool csprRead::newLine()
 
 /* Grabs a line from the file.  You can specify how long the character stream with the passed through
    integer. */
-std::string csprRead::getLine(int l)
+std::string csprRef::getLine(int l)
 {
     char nts[l];
     fscanf( stream, "%[^\n]\n", nts);
@@ -60,36 +60,28 @@ void csprRead::loadTargets(std::string f) {
 /* This function loads the reference targets. This is the import function for the .cspr file that is used as a reference */
 void csprRead::LoadRefTargets() {
     openFile();
+    int chromCounter = 0;
     std::string junkfirst = getLine(50); // skips the first chromosome indicator
-    std::vector<gRNA*> curset;
     while (true) {
         std::string line = getLine(100);  //No line should be longer than 100 characters
         
         //Determine if we have moved to the repeats section of the file:
         if (line.find("REPEATS") != std::string::npos) {
-            Targets.push_back(curset);
-            curset.clear();
             std::cout << "Reached Repeats section. Moving on to process repeat structure.\n";
             processMultis();
             break;
             //Determine whether the new line sets the start of a new Chromosome/Scaffold:
         } else if (line.find("CHROMOSOME") != std::string::npos) {
-            Targets.push_back(curset);
-            curset.clear();
+            chromCounter++;
         } else {
-            gRNA* target = new gRNA;
-            target->set_multiflag(false);
-            //Get the position and add it to the target
+            //Get the position/location and add it to the location
             int pos_end = line.find(",");
-            std::string pos = line.substr(0,pos_end);
-            target->set_location(pos);
+            Locs[chromCounter].push_back(line.substr(0,pos_end));
             //Get the sequence and add it to the target
             int seq_end = line.substr(pos_end+1).find(",");
-            target->set_seq(line.substr(pos_end+1,seq_end));
+            RefTargets += line.substr(pos_end+1,seq_end);
             //Get the score and add it to the target
-            target->set_score(line.substr(seq_end));
-            //Adding the created target struct to the vector for that chromosome/scaffold
-            curset.push_back(target);
+            Scores.push_back(line.substr(seq_end));
         }
     }
     closeFile();
