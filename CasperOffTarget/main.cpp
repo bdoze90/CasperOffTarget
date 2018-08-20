@@ -10,7 +10,7 @@
 #include <thread>
 #include <string>
 #include <vector>
-#include "csprRead.hpp"
+#include "csprRef.hpp"
 #include "RefSequences.hpp"
 #include "gRNA.hpp"
 
@@ -21,27 +21,20 @@
 
 //int argc, const char * argv[]
 int main() {
-    std::vector<std::string> argv = {"True","/Users/brianmendoza/Desktop/ecospCas9.cspr","/Users/brianmendoza/Desktop/eco_off.txt",""};
+    std::vector<std::string> argv = {"/Users/brianmendoza/Desktop/OFF_QUERY.txt","/Users/brianmendoza/Desktop/ecospCas9.cspr","/Users/brianmendoza/Desktop/eco_off.txt",""};
     // insert code here...
-    std::cout << "Hello, World!\n";
+    std::cout << "Running off-target analysis for: " << argv[1] << "\n";
+    
     //Open the file and load all the targets from the unique and repeats sections
     csprRef ref_ghost;
-    ref_ghost.setFile(argv[1]); //change the argv to string
-    ref_ghost.loadTargets();
-    //Load all the desired sequences to check for off targets.  If this is comprehensive (a complete index) then will need to run a loop of loops
-    std::string a = argv[0];
+    ref_ghost.LoadcsprFile(argv[1]); //change the argv to string when ready for deployment
+    
+    // Object for running actual off-target algorithm:
     OnTargets otr;
-    otr.loadRef(&ref_ghost);
-    if (a == "False") {
-        otr.readInFromFile(argv[2]);
-        otr.run_off_algorithm();
-    } else { // This is a comphrehensive off target analysis
-        for (int i=0;i<ref_ghost.Targets.size();i++) {
-            otr.set_base_seqs(ref_ghost.Targets[i]);
-            std::cout << "Scaffold/Chromosome # " + std::to_string(i+1) + " off target analysis: \n";
-            otr.run_off_algorithm();
-        }
-    }
+    otr.LoadTargetQuery(argv[0]);
+    otr.loadData(&ref_ghost);
+    otr.compressed(true);  //set this to whether this should be the compressed or uncompressed sequences for comparison.off
+    otr.run_off_algorithm(16); // input should be the number of threads you want to generate
     return 0;
 }
 

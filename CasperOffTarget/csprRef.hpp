@@ -12,38 +12,38 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
-#include "gRNA.hpp"
+#include "FileOp.hpp"
 
 class csprRef {
 public:
     csprRef();
-    void LoadcsprFile(std::string name) {filename = name;}
-    void LoadTargetQuery(std::string);
-    //Accessible storage container for all the targets in the genome/assembly by chromosome/scaffold
-    std::vector<std::vector<gRNA*>> TargetQuery;
+    void LoadcsprFile(std::string name);
     
-    //Base info from the .cspr file. This is a long string that has every target in succession
-    std::string RefTargets;
+    std::string getRefString() {return RefTargets;}
+    //Obtaining information from the private containers:
+    std::string getLoc(long l) {return Locs[l];}
+    int getChrScaf(long);
+    int getScore(long x) {return Scores[x];}
     
-    //Also base info from .cspr file has the location and scores at the vector index of the Reftarget position
-    std::vector<std::string> Locs; //first index is chromosome/scaffold the rest are for locations
-    std::vector<int> Scores;
-    // Vector below stores the locations where the chromosome/scaffolds start and stop in RefTargets
-    std::vector<long> Chrpos;
+    
     
 private:
-    void openFile();
+    //Base info from the .cspr file. This is a long string that has every target in succession.
+    std::string RefTargets;
+    //Also base info from .cspr file has the location and scores at the vector index of the Reftarget position
+    std::vector<std::string> Locs; //all compressed locations in succession
+    std::vector<int> Scores; //all compressed scores in succession
+    // Vector below stores the locations where the chromosome/scaffolds stop in RefTargets
+    std::vector<long> Chrpos;
+    
+    
+private:
     bool newLine();
     std::string getLine(int);
     void closeFile();
     void processMultis();
-    void LoadRefTargets();
     std::vector<std::string> Msplit(const std::string &text, char sep);
     
-    std::vector<long> hits;
-private:  // Private machinery for parsing the file
-    FILE* stream;
-    std::string filename;
 };
 
 #endif /* csprRead_hpp */

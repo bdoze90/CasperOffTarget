@@ -15,33 +15,32 @@
 #include <thread>
 #include <stdlib.h>
 #include <stdio.h>
-#include "csprRead.hpp"
+#include "csprRef.hpp"
+#include "FileOp.hpp"
 #include "gRNA.hpp"
+#include "OffScoring.hpp"
 
 class OnTargets {
 public:
-    void loadRef(csprRead* c) {ref = c;}
+    void loadData(csprRef* c) {ref = c;}  //obtain information from csprRef object
+    void compressed(bool) {is_compressed = true;}
     
-    void readInFromFile(std::string);
+    void LoadTargetQuery(std::string);
+    
     void set_base_seqs(std::vector<gRNA*> x) {base_seqs = x;}
     
-    void run_off_algorithm();
+    //generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs
+    void run_off_algorithm(int);
     
 private:
-    struct gRNA_short {
-        gRNA* base;
-        std::vector<std::string> hit;
-        std::vector<int> chromscaff;
-        std::vector<std::string> loc;
-    };
-    void findSimilars(gRNA*);
-    std::vector<gRNA_short> preprocessed_seqs;
-    void generateScore();
+    void findSimilars(gRNA*);  //runs algorithm on individual target
+    std::vector<gRNA*> putative_off_seqs;  //storage for
+    void generateScores(); // calls the scoring algorithm iterating through putative_off_seqs
     
 private:
-    FILE* stream;
-    std::string filename;
-    csprRead* ref;
+    bool is_compressed = true;
+    csprRef* ref;
+    OffScoring scoreGenerator;
     std::vector<gRNA*> base_seqs;
 };
 

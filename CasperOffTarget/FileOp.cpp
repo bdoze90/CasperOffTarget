@@ -18,6 +18,12 @@ void FileOp::open(std::string filename)
     assert(stream);
 }
 
+bool FileOp::newLine()
+{
+    if (feof(stream) == 0) return true;
+    return false;
+}
+
 bool FileOp::endFile()
 {
     if (feof(stream) == 0) return true;
@@ -41,7 +47,7 @@ void FileOp::closeFile()
 
 
 /* Code for processing the Repeats section which requires different processing of the locations and sequences */
-void csprRef::processMultis() {
+void FileOp::processMultis() {
     while (true) {
         std::string line = getLine(15); //This line is just the seed sequence
         if (line.find("END_OF") != std::string::npos) {

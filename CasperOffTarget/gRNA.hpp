@@ -13,26 +13,38 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include "Compression.h"
 
 class gRNA {
 public:
     // setting information:
     void set_location(std::string s) { compressed_location = s;}
-    void set_score(std::string s) { compressed_score = s;}
+    void set_score(std::string s) { score = decompress(s);}
     void set_seq(std::string s) {compressed_seq = s;}
-    void set_multiflag(bool b) {multiflag = b;}
     // retrieving information:
-    std::string get_location();
+    std::string get_Clocation();
     int get_score();
-    std::string get_sequence();
+    std::string get_Csequence();
     std::string gcs() {return compressed_seq;}
-    bool get_multiflag() {return multiflag;}
+    // setting off target information
+    void loadPutOff(std::string, std::string);
+    
+private:
+    //Class containing decompression algorithms
+    Compression Compressor;
     
 private:
     std::string compressed_location;
-    std::string compressed_score;
+    int score;
     std::string compressed_seq;
-    bool multiflag;
+    long decompress(std::string comp);
+    
+// Off Target Identities
+private:
+    std::vector<std::string> hits;
+    std::vector<int> chromscaff;
+    std::vector<std::string> loc;
+
 };
 
 #endif /* gRNA_hpp */

@@ -15,19 +15,28 @@
 #include <thread>
 #include <functional>
 #include <assert.h>
-#include "csprRead.hpp"
+#include "csprRef.hpp"
+#include "OffScoring.hpp"
 
-void OnTargets::readInFromFile(std::string fl) {
-    filename = fl;
-}
+/* CONTAINER AND DATA MANIPULATION FUNCTIONS
+ * LoadTargetQuery */
 
-void OnTargets::run_off_algorithm() {
+void OnTargets::LoadTargetQuery(std::string query_file) {
+    FileOp fileop;
+    fileop.open(query_file);
+ 
+/* ALGORITHMIC FUNCTIONS
+ * run_off_algorithm
+ * findSimilars
+ * generateScores */
+
+void OnTargets::run_off_algorithm(int thr) {
     std::vector<gRNA*> base = base_seqs;
     /*for (int i=0;i<base.size();i++) {
         findSimilars(base[i]);
     }*/
     /* Run 16 threads to get through all of the gRNAs in question */
-    for (int i=0;i<base.size();i+=4) {
+    for (int i=0;i<base.size();i+=thr) {
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
             findSimilars(base[i]);
@@ -102,33 +111,17 @@ void OnTargets::run_off_algorithm() {
 
 // This is the target of the thread function
 void OnTargets::findSimilars(gRNA* seq) {
-    // set the grna short object
-    if (seq->get_multiflag()) {
-        // do nothing
-    } else {
-        gRNA_short shr;
-        shr.base = seq;
-        // got to iterate through both vectors
-        for (int i=0;i<ref->Targets.size();i++) {
-            for (int j=0;j<ref->Targets[i].size();j++) {
-                std::string p_hit = ref->Targets[i][j]->gcs();
-                // make sure that its not self-matching:
-                if (seq->gcs() == p_hit) {
-                    continue;
-                }
-                // break input sequence into 4 subsequences up until the +/-
-                for (int s=0;s<3;s++) {
-                    std::string compare = seq->gcs().substr(s,4);
-                    if (p_hit.find(compare) != std::string::npos) {
-                        // add to the preprocessed seq vectors
-                        std::string loca = ref->Targets[i][j]->get_location();
-                        shr.loc.push_back(loca);
-                        shr.chromscaff.push_back(i);
-                        shr.hit.push_back(p_hit);
-                    }
-                }
-            }
+    //See if any subset of the sequence appears in the csprRef.reftargets object:
+    // break input sequence into 4 subsequences:
+    for (int s=0;s<3;s++) {
+        std::string compare = seq->gcs().substr(s,4);
+        unsigned long p_hit_loc = ref->RefTargets.find(compare);
+        if (p_hit_loc != std::string::npos) {
+            long id = p_hit_loc % 9;
+            seq->loadPutOff(ref->getLoc(id),ref->getChrScaf(id),ref->getScore(id));
         }
+            
+    }
         // code for just grabbing from output:
         std::string outline = seq->gcs() + " off targets:\n";
         for (int i=0;i<shr.loc.size();i++) {
@@ -141,8 +134,9 @@ void OnTargets::findSimilars(gRNA* seq) {
 
 void OnTargets::generateScore() {
     // Run the full scoring algorithm on all of the preprocessed sequences
+    OffScoring oscore;
     for (int i=0;i<preprocessed_seqs.size();i++) {
-        // generate the score here probably faster to run this in the already generated python code
+        oscore.score(preprocessed_seqs[i]);
     }
 }
 
