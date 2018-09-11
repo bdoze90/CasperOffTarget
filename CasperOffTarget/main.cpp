@@ -23,11 +23,11 @@ int main(int argc, const char * argv[]) {
     //std::vector<std::string> argv = {"/Users/brianmendoza/Desktop/COFF_QUERY.txt", "True", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Dropbox/kfd_off.txt","/Users/brianmendoza/Desktop/CASPERinfo"};
     
     //Convert all input into std::string objects:
-    std::string query_file = std::string(argv[0]);
-    std::string is_query_compressed = std::string(argv[1]);
-    std::string cspr_reference = std::string(argv[2]);
-    std::string output_file = std::string(argv[3]);
-    std::string settings_file = std::string(argv[4]);
+    std::string query_file = std::string(argv[1]);
+    std::string is_query_compressed = std::string(argv[2]);
+    std::string cspr_reference = std::string(argv[3]);
+    std::string output_file = std::string(argv[4]);
+    std::string settings_file = std::string(argv[5]);
     
     std::cout << "Running off-target analysis for: " << cspr_reference << "\n";
     
