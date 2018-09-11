@@ -81,7 +81,7 @@ void OnTargets::run_off_algorithm(int thr) {
         std::thread t3([this,&base,&i]() {
             findSimilars(base[i+3]);
         });
-        /*std::thread t4([this,&base,&i]() {
+        std::thread t4([this,&base,&i]() {
             findSimilars(base[i+4]);
         });
         std::thread t5([this,&base,&i]() {
@@ -116,12 +116,12 @@ void OnTargets::run_off_algorithm(int thr) {
         });
         std::thread t15([this,&base,&i]() {
             findSimilars(base[i+15]);
-        });*/
+        });
         running_threads.push_back(&t0);
         running_threads.push_back(&t1);
         running_threads.push_back(&t2);
         running_threads.push_back(&t3);
-        /*running_threads.push_back(&t4);
+        running_threads.push_back(&t4);
         running_threads.push_back(&t5);
         running_threads.push_back(&t6);
         running_threads.push_back(&t7);
@@ -132,7 +132,7 @@ void OnTargets::run_off_algorithm(int thr) {
         running_threads.push_back(&t12);
         running_threads.push_back(&t13);
         running_threads.push_back(&t14);
-        running_threads.push_back(&t15);*/
+        running_threads.push_back(&t15);
         // Join all the running threads before continuing into the next iteration of the loop
         for (int j=0;j<running_threads.size();j++) {
             running_threads[j]->join();

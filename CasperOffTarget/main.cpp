@@ -41,7 +41,7 @@ int main(int argc, const char * argv[]) {
     }
     otr.LoadTargetQuery(query_file);
     otr.loadData(cspr_reference);
-    otr.run_off_algorithm(4); // input should be the number of threads you want to generate and the output file
+    otr.run_off_algorithm(16); // input should be the number of threads you want to generate and the output file
     otr.generateScores(settings_file,output_file);
     return 0;
 }
