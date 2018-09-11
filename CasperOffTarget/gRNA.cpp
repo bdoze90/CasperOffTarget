@@ -9,17 +9,14 @@
 #include "gRNA.hpp"
 
 
-std::string gRNA::get_location() {
+std::string gRNA::get_Clocation() {
     // need to uncompress location into long object
     return compressed_location;
 }
 
-std::string gRNA::get_sequence() {
-    // need to uncompress sequence
-    return "sequence";
-}
-
-int gRNA::get_score() {
-    // need to uncompress score
-    return 50;
+//returns whether or not any putative hits were found somewhere on the genome.
+bool gRNA::hasHits() {
+    if (putative_off_seq_ids.size() > 0) {
+        return true;
+    } else { return false; }
 }

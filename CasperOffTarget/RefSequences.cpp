@@ -19,11 +19,42 @@
 #include "OffScoring.hpp"
 
 /* CONTAINER AND DATA MANIPULATION FUNCTIONS
+ * loadData
  * LoadTargetQuery */
 
+void OnTargets::loadData(std::string f_name) {
+    //Open the file and load all the targets from the unique and repeats sections
+    ref.LoadcsprFile(f_name);
+}
+
+/* Grab the ontargets from the OFF_QUERY file */
 void OnTargets::LoadTargetQuery(std::string query_file) {
     FileOp fileop;
     fileop.open(query_file);
+    while (fileop.endFile()) {
+        gRNA *query = new gRNA;
+        std::vector<std::string> gcs = fileop.getSepLine(50, ',');
+        std::string sequence;
+        if (is_compressed) {
+            //find the end of the sequence with the strand marker:
+            if (gcs[1].find('+') != std::string::npos) {
+                sequence = gcs[1].substr(0,gcs[1].find('+'));
+            } else if (gcs[1].find('-') != std::string::npos) {
+                sequence = gcs[1].substr(0,gcs[1].find('-'));
+            }
+            //set the gRNA object values
+            query->set_location(gcs[0]);
+            query->set_seq(sequence);
+            query->set_score(gcs[2]);
+        } else {
+            query->set_location(S.compress(std::stol(gcs[0])));
+            query->set_seq(S.compress(gcs[1]));
+            query->set_score(S.compress(std::stol(gcs[3]))); // index 2 is the PAM, skip this and go to the score
+        }
+        base_seqs.push_back(query);
+    }
+    fileop.closeFile();
+}
  
 /* ALGORITHMIC FUNCTIONS
  * run_off_algorithm
@@ -31,12 +62,12 @@ void OnTargets::LoadTargetQuery(std::string query_file) {
  * generateScores */
 
 void OnTargets::run_off_algorithm(int thr) {
+    std::cout << "Running Off Target Algorithm for " << base_seqs.size() << " sequences..." << std::endl;
     std::vector<gRNA*> base = base_seqs;
-    /*for (int i=0;i<base.size();i++) {
-        findSimilars(base[i]);
-    }*/
     /* Run 16 threads to get through all of the gRNAs in question */
-    for (int i=0;i<base.size();i+=thr) {
+    int i = 0;
+    while ((base.size()-i)/thr > 0) {
+        std::cout << "Remaining sequences to be searched: " << base.size()-i << "\r";
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
             findSimilars(base[i]);
@@ -50,7 +81,7 @@ void OnTargets::run_off_algorithm(int thr) {
         std::thread t3([this,&base,&i]() {
             findSimilars(base[i+3]);
         });
-        std::thread t4([this,&base,&i]() {
+        /*std::thread t4([this,&base,&i]() {
             findSimilars(base[i+4]);
         });
         std::thread t5([this,&base,&i]() {
@@ -85,12 +116,12 @@ void OnTargets::run_off_algorithm(int thr) {
         });
         std::thread t15([this,&base,&i]() {
             findSimilars(base[i+15]);
-        });
+        });*/
         running_threads.push_back(&t0);
         running_threads.push_back(&t1);
         running_threads.push_back(&t2);
         running_threads.push_back(&t3);
-        running_threads.push_back(&t4);
+        /*running_threads.push_back(&t4);
         running_threads.push_back(&t5);
         running_threads.push_back(&t6);
         running_threads.push_back(&t7);
@@ -101,12 +132,17 @@ void OnTargets::run_off_algorithm(int thr) {
         running_threads.push_back(&t12);
         running_threads.push_back(&t13);
         running_threads.push_back(&t14);
-        running_threads.push_back(&t15);
+        running_threads.push_back(&t15);*/
         // Join all the running threads before continuing into the next iteration of the loop
         for (int j=0;j<running_threads.size();j++) {
             running_threads[j]->join();
         }
+        i+=thr;
     }
+    for (int k=i;k<base.size();k++) {
+        findSimilars(base[i]);
+    }
+    std::cout << "Done searching for putative matches. Beginning scoring process.                 " << std::endl; //spaces are to delete random numbers
 }
 
 // This is the target of the thread function
@@ -114,29 +150,31 @@ void OnTargets::findSimilars(gRNA* seq) {
     //See if any subset of the sequence appears in the csprRef.reftargets object:
     // break input sequence into 4 subsequences:
     for (int s=0;s<3;s++) {
-        std::string compare = seq->gcs().substr(s,4);
-        unsigned long p_hit_loc = ref->RefTargets.find(compare);
+        std::string compare = seq->get_Csequence().substr(s,4);
+        unsigned long p_hit_loc = ref.AccessRefString()->find(compare);
         if (p_hit_loc != std::string::npos) {
-            long id = p_hit_loc % 9;
-            seq->loadPutOff(ref->getLoc(id),ref->getChrScaf(id),ref->getScore(id));
+            long id = p_hit_loc / 8;
+            seq->addMatch(id);
         }
-            
-    }
-        // code for just grabbing from output:
-        std::string outline = seq->gcs() + " off targets:\n";
-        for (int i=0;i<shr.loc.size();i++) {
-            outline += (std::to_string(shr.chromscaff[i]) + "," + shr.loc[i] + "," + shr.hit[i] + "\n");
-        }
-        std::cout << outline;
-        preprocessed_seqs.push_back(shr);
     }
 }
 
-void OnTargets::generateScore() {
+/* This function generates off target scores for all of the sequences that were identifed in the inital searching function: FindSimilars */
+void OnTargets::generateScores(std::string settings_filename,std::string output_filename) {
+    FileOp sfile;
+    sfile.open(settings_filename);
+    // Initialize the offscoring class object with the FileOp class call
+    OffScoring myoff;
+    myoff.loadCspr(&ref);
+    myoff.setOutputFile(output_filename);
     // Run the full scoring algorithm on all of the preprocessed sequences
-    OffScoring oscore;
-    for (int i=0;i<preprocessed_seqs.size();i++) {
-        oscore.score(preprocessed_seqs[i]);
+    for (int i=0;i<base_seqs.size();i++) {
+        std::cout << "Scoring " << double(i)/double(base_seqs.size()) << "% complete.            " << "\r"; // reports the percentage of scores remaining
+        // check to see if this particular query has any putative off sequence hits:
+        if (base_seqs[i]->hasHits()) {
+            //now run the scoring algorithm by getting all the information
+            myoff.score(base_seqs[i]);
+        }
     }
 }
 

@@ -21,20 +21,29 @@
 
 //int argc, const char * argv[]
 int main() {
-    std::vector<std::string> argv = {"/Users/brianmendoza/Desktop/OFF_QUERY.txt","/Users/brianmendoza/Desktop/ecospCas9.cspr","/Users/brianmendoza/Desktop/eco_off.txt",""};
-    // insert code here...
-    std::cout << "Running off-target analysis for: " << argv[1] << "\n";
+    std::vector<std::string> argv = {"/Users/brianmendoza/Desktop/OFF_QUERY.txt", "False", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Dropbox/kfd_off.txt","/Users/brianmendoza/Desktop/CASPERinfo"};
     
-    //Open the file and load all the targets from the unique and repeats sections
-    csprRef ref_ghost;
-    ref_ghost.LoadcsprFile(argv[1]); //change the argv to string when ready for deployment
+    //Convert all input into std::string objects:
+    std::string query_file = std::string(argv[0]);
+    std::string is_query_compressed = std::string(argv[1]);
+    std::string cspr_reference = std::string(argv[2]);
+    std::string output_file = std::string(argv[3]);
+    std::string settings_file = std::string(argv[4]);
+    
+    std::cout << "Running off-target analysis for: " << cspr_reference << "\n";
     
     // Object for running actual off-target algorithm:
     OnTargets otr;
-    otr.LoadTargetQuery(argv[0]);
-    otr.loadData(&ref_ghost);
-    otr.compressed(true);  //set this to whether this should be the compressed or uncompressed sequences for comparison.off
-    otr.run_off_algorithm(16); // input should be the number of threads you want to generate
+    std::cout << "Query file compression set to " << is_query_compressed << std::endl;
+    if (is_query_compressed.find('T') != std::string::npos || is_query_compressed.find('t') != std::string::npos) {
+        otr.compressed(true);
+    } else {
+        otr.compressed(false);  //set this to whether this should be the compressed or uncompressed sequences for comparison.off
+    }
+    otr.LoadTargetQuery(query_file);
+    otr.loadData(cspr_reference);
+    otr.run_off_algorithm(4); // input should be the number of threads you want to generate and the output file
+    otr.generateScores(settings_file,output_file);
     return 0;
 }
 

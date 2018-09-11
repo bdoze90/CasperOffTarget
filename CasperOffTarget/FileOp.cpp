@@ -8,10 +8,6 @@
 
 #include "FileOp.hpp"
 
-FileOp::FileOp() {
-    LoadRefTargets();
-}
-
 void FileOp::open(std::string filename)
 {
     stream = fopen( filename.c_str(), "r");
@@ -45,33 +41,9 @@ void FileOp::closeFile()
     if(stream) fclose( stream);
 }
 
-
-/* Code for processing the Repeats section which requires different processing of the locations and sequences */
-void FileOp::processMultis() {
-    while (true) {
-        std::string line = getLine(15); //This line is just the seed sequence
-        if (line.find("END_OF") != std::string::npos) {
-            std::cout << "Reached the end of the file. \n";
-            break;
-        }
-        // Save the seed
-        std::string seedseq = line;
-        // Get all tails and locations/scores associated with the seed
-        std::string line2 = getLine(10000); // Much longer line to accomodate all the tails.
-        //Split with tokenizer
-        std::vector<std::string> tails = Msplit(line2,'\t');
-        for (int i=0; i<tails.size()-1; i++) { // -1 takes into account that there is an extra tab produced making a blank vector location in tails
-            //Split with tokenizer here as well
-            std::vector<std::string> locs = Msplit(tails[i], ',');
-            gRNA* target = new gRNA;
-            target->set_location(locs[1]);
-            target->set_seq(seedseq+locs[2]);
-            target->set_score(locs[3]);
-            target->set_multiflag(true);
-            int chr = atoi(locs[0].c_str())-1;
-            Targets[chr].push_back(target);
-        }
-    }
+/* This function is used if you want to get a line separated by a given token */
+std::vector<std::string> FileOp::getSepLine(int count, char sep) {
+    return Msplit(getLine(count), sep);
 }
 
 /* A method for splitting the repeats section. */
@@ -85,3 +57,52 @@ std::vector<std::string> FileOp::Msplit(const std::string &text, char sep) {
     tokens.push_back(text.substr(start));
     return tokens;
 }
+
+/* BELOW ARE ALL THE FUNCTIONS FOR WRITING TO A FILE WriteFile Class. */
+void WriteFile::openWrite(std::string fn) {
+    outputfile.open(fn);
+}
+
+void WriteFile::write(std::string stuff) {
+    outputfile << stuff;
+}
+
+void WriteFile::write(long stuff) {
+    outputfile << stuff;
+}
+
+void WriteFile::write(double stuff) {
+    outputfile << stuff;
+}
+
+void WriteFile::writeLine(std::string line) {
+    outputfile << line << "\n";
+}
+
+void WriteFile::close() {
+    outputfile.close();
+}
+
+/* Process settings.  This is a specific function used for generating an OffScoring class and filling out the parameters needs to have forward declaration.*/
+//OffScoring FileOp::processSettings() {
+    //do nothing right now
+    /*// Get to the line with the HSU_MATRIX
+    bool atmatrix = false;
+    while (!atmatrix) {
+        // check if it is the matrix title line
+        if (getLine(20).find("MATRIX")) {
+            atmatrix = true;
+        }
+    }
+    // Start processing the items in the matrix
+    std::string matrixline = getLine(1000);
+    while (matrixline.find("---") != 0) {
+        std::vector<std::string> Trow = Msplit(matrixline,'\t');
+        std::vector<double> row;
+        // Go through the Trow and create a vector with doubles instead of strings
+        for (int i=0;i<Trow.size();i++) {
+            row.push_back(std::stod(Trow[i]));
+        }
+        matrixline = getLine(1000);
+    }*/
+//}

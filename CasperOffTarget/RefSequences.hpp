@@ -19,29 +19,30 @@
 #include "FileOp.hpp"
 #include "gRNA.hpp"
 #include "OffScoring.hpp"
+#include "CSeqTranslate.hpp"
 
 class OnTargets {
 public:
-    void loadData(csprRef* c) {ref = c;}  //obtain information from csprRef object
-    void compressed(bool) {is_compressed = true;}
+    //OnTargets();
+    void loadData(std::string); //pass filename of .cspr file for reference
+    void compressed(bool t) {is_compressed = t;}
     
-    void LoadTargetQuery(std::string);
-    
+    void LoadTargetQuery(std::string);  // pass OFF_QUERY file to the class
     void set_base_seqs(std::vector<gRNA*> x) {base_seqs = x;}
     
     //generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs
     void run_off_algorithm(int);
+    void generateScores(std::string,std::string); // calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
     
 private:
     void findSimilars(gRNA*);  //runs algorithm on individual target
-    std::vector<gRNA*> putative_off_seqs;  //storage for
-    void generateScores(); // calls the scoring algorithm iterating through putative_off_seqs
+    std::vector<gRNA*> base_seqs;  //stores all queries loaded by the public function set_base_seqs
     
 private:
-    bool is_compressed = true;
-    csprRef* ref;
+    bool is_compressed;
+    csprRef ref;
     OffScoring scoreGenerator;
-    std::vector<gRNA*> base_seqs;
+    SeqTranslate S;
 };
 
 #endif /* RefSequences_hpp */
