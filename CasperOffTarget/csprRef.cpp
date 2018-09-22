@@ -30,6 +30,8 @@ void csprRef::LoadcsprFile(std::string cspr) {
     
         //Determine if we have moved to the repeats section of the file:
         if (line.find("REPEATS") != std::string::npos) {
+            // consolidate the id of the last unique by getting the length of the Locs vector:
+            multistart = Locs.size();
             std::cout << "Reached Repeats section. Moving on to process repeat structure.\n";
             Chrpos.push_back(chromCounter); // end of Chrpos tells you the start of the Repeats section.
             processMultis(myfile);
@@ -56,12 +58,13 @@ void csprRef::LoadcsprFile(std::string cspr) {
 void csprRef::processMultis(FileOp myfile) {
     while (true) {
         std::string line = myfile.getLine(15); //This line is just the seed sequence
-        std::cout << line << std::endl;
         if (line.find("END_OF") != std::string::npos) {
             std::cout << "Reached the end of the file. \n";
             break;
         }
-        // Add filler to the seed:
+        // Add the marker that differentiates the seed from the filler:
+        line = '!' + line;
+        // Add remaining filler to the seed:
         for (int i=line.size()-1;i<8;i++) {
             line = '|' + line;
         }

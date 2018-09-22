@@ -27,6 +27,10 @@ public:
     int getChrScaf(long);
     int getScore(long x) {return Scores[x/8];}
     
+    // returns the last id of the last chromosome before the multis so that anything greater is in the multis
+    long multiStart() {return multistart;}
+    std::vector<std::string> getMultis(long ind) {return multiLocs[ind];}
+    
 
 private:
     //Base info from the .cspr file. This is a long string that has every target in succession.
@@ -38,8 +42,9 @@ private:
     // Vector below stores the locations where the chromosome/scaffolds stop in RefTargets (number represents how many targets are in each)
     std::vector<long> Chrpos;
     
-    //Stores the vectors of multi tails and their positions
+    //Stores the vectors of multi tails and their positions separated by commas
     std::vector<std::vector<std::string>> multiLocs;
+    long multistart;
     
 private:
     void processMultis(FileOp);

@@ -34,14 +34,28 @@ double OffScoring::scorePutatives(std::vector<long> offs,gRNA* onseq) {
     for (int i=0;i<offs.size();i++) {
         offtarget myoff;
         long id = offs.at(i);
-        myoff.sequence = S.decompress(ref->AccessRefString()->substr(id*8,8));  // find out the actual location of the id and get the string there
-        myoff.chromscaff = ref->getChrScaf(id);
-        myoff.position = ref->getLoc(id);
-        myoff.on_score = ref->getScore(id);
-        // Check to make sure that the putative off target is not a self-match:
-        if (myoff.sequence != onseq->get_sequence()) {
-            // Put the offtarget object into the decomposed offs vector:
-            decomposed_offs.push_back(myoff);
+        // CHECK TO SEE IF MATCH IS IN THE REPEATS SECTION, THIS REQUIRES MULTIPLE FINAL SEQUENCES TO BE RETURNED:
+        if (id > ref->multiStart()) {
+            long multirelloc = id - ref->multiStart();  //finds the relative location of the sequence for getting multi information
+            // get the information from the multilocs vector
+            std::vector<std::string> curmultis = ref->getMultis(multirelloc);
+            // Loop to go through all the permutations in the curmultis vector to then put them into myoff and then into decomposed offs:
+            for (int j=0;j<curmultis.size();j++) {
+                
+            }
+            //combine the sequence in the RefString with the multilocs
+            
+            
+        } else {
+            myoff.sequence = S.decompress(ref->AccessRefString()->substr(id*8,8));  // find out the actual location of the id and get the string there
+            myoff.chromscaff = ref->getChrScaf(id);
+            myoff.position = ref->getLoc(id);
+            myoff.on_score = ref->getScore(id);
+            // Check to make sure that the putative off target is not a self-match:
+            if (myoff.sequence != onseq->get_sequence()) {
+                // Put the offtarget object into the decomposed offs vector:
+                decomposed_offs.push_back(myoff);
+            }
         }
     }
     // These variables are to keep track of the scores counted so that an average can be reported.
@@ -77,7 +91,7 @@ double OffScoring::scoreStruct(offtarget oid, gRNA* on) {
             std::string mstr = std::string() + on_seq[i] + S.revcom(oid.sequence[i]);
             mismatch_id.push_back(mstr);
         }
-        if (mismatches.size()>4) {
+        if (mismatches.size()>5) {
             return 1.0;
         }
     }
