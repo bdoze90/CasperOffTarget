@@ -65,13 +65,14 @@ void csprRef::processMultis(FileOp myfile) {
         // Add the marker that differentiates the seed from the filler:
         line = '!' + line;
         // Add remaining filler to the seed:
-        for (int i=line.size()-1;i<8;i++) {
+        for (int i=line.size();i<8;i++) {
             line = '|' + line;
         }
         // Save the seed
         RefTargets += line;
         // Get all tails and locations/scores associated with the seed.  Much longer line to accomodate all the tails.
         std::vector<std::string> tails = myfile.getSepLine(50000,'\t');
+        tails.pop_back(); // there is an extra \t in the .cspr file, this fixes this problem.
         multiLocs.push_back(tails);
     }
 }

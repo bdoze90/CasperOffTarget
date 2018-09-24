@@ -36,18 +36,35 @@ double OffScoring::scorePutatives(std::vector<long> offs,gRNA* onseq) {
         long id = offs.at(i);
         // CHECK TO SEE IF MATCH IS IN THE REPEATS SECTION, THIS REQUIRES MULTIPLE FINAL SEQUENCES TO BE RETURNED:
         if (id > ref->multiStart()) {
-            long multirelloc = id - ref->multiStart();  //finds the relative location of the sequence for getting multi information
+            std::string c_base_seq = ref->AccessRefString()->substr(id*8,8);
+            // set the c_base_seq by finding the index one after the "!" to start the substr.
+            c_base_seq = c_base_seq.substr(c_base_seq.find('!')+1);
             // get the information from the multilocs vector
+            long multirelloc = id - ref->multiStart();  //finds the relative location of the sequence for getting multi information
             std::vector<std::string> curmultis = ref->getMultis(multirelloc);
             // Loop to go through all the permutations in the curmultis vector to then put them into myoff and then into decomposed offs:
             for (int j=0;j<curmultis.size();j++) {
-                
+                std::vector<std::string> ind_multi = S.Msplit(curmultis[j],',');
+                myoff.chromscaff = std::stoi(ind_multi[0]);
+                myoff.position = S.decompress_location(ind_multi[1]);
+                myoff.on_score = S.decompress_location(ind_multi[3]);
+                // concatenate the base sequence and the tail and add it to the sequence:
+                std::string the_tailseq;
+                if (ind_multi[2].find('+') != std::string::npos) {
+                    the_tailseq = ind_multi[2].substr(0,ind_multi[2].find('+'));
+                } else {
+                    the_tailseq = ind_multi[2].substr(0,ind_multi[2].find('-'));
+                }
+                myoff.sequence = S.decompress(the_tailseq,4) + S.decompress(c_base_seq,16);
+                //std::cout << c_base_seq << "," << S.decompress(c_base_seq,16) << ";" << the_tailseq << "," << S.decompress(the_tailseq,4) << std::endl;
+                // Check to make sure that the putative off target is not a self-match:
+                if (myoff.sequence != onseq->get_sequence()) {
+                    // Put the offtarget object into the decomposed offs vector:
+                    decomposed_offs.push_back(myoff);
+                }
             }
-            //combine the sequence in the RefString with the multilocs
-            
-            
         } else {
-            myoff.sequence = S.decompress(ref->AccessRefString()->substr(id*8,8));  // find out the actual location of the id and get the string there
+            myoff.sequence = S.decompress(ref->AccessRefString()->substr(id*8,8),20);  // find out the actual location of the id and get the string there
             myoff.chromscaff = ref->getChrScaf(id);
             myoff.position = ref->getLoc(id);
             myoff.on_score = ref->getScore(id);

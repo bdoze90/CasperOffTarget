@@ -32,7 +32,7 @@ std::string SeqTranslate::compress(long b10) {
 
 /* Takes a compressed nucleotide sequence and returns the normal nucleotide sequence.  Uses the code of decompress_location
  * to get to base10 and then runs additional code to get to the nucleotide sequence. */
-std::string SeqTranslate::decompress(std::string input) {
+std::string SeqTranslate::decompress(std::string input, int seq_size) {
     std::string output;
     long b10input = decompress_location(input);
     while (b10input >= 4) {
@@ -42,7 +42,7 @@ std::string SeqTranslate::decompress(std::string input) {
     }
     output += nucleotides[b10input];
     // The for loop fixes the problem of A's not being added to the end because they are removed on compression
-    for (int i=output.size(); i<20; i++) {  //WARNING! THIS ONLY WORKS FOR FILLING OUT THE 20NT SEED SEQUENCE!
+    for (int i=output.size(); i<seq_size; i++) {
         output += 'A';
     }
     return output;
@@ -88,4 +88,16 @@ char SeqTranslate::revcom(char c) {
             break;
     }
     return n;
+}
+
+/* A method for splitting the repeats section. */
+std::vector<std::string> SeqTranslate::Msplit(const std::string &text, char sep) {
+    std::vector<std::string> tokens;
+    std::size_t start = 0, end = 0;
+    while ((end = text.find(sep, start)) != std::string::npos) {
+        tokens.push_back(text.substr(start, end - start));
+        start = end + 1;
+    }
+    tokens.push_back(text.substr(start));
+    return tokens;
 }

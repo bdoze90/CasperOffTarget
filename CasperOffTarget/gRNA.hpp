@@ -25,7 +25,7 @@ public:
     std::string get_Clocation();
     int get_score() {return double(score);} // Convert to double so that the return value can be a fraction.
     std::string get_Csequence() {return compressed_seq;}
-    std::string get_sequence() {return S.decompress(compressed_seq);}
+    std::string get_sequence() {return S.decompress(compressed_seq,20);}
     long get_location() {return S.decompress_location(compressed_location);}
     // setting off target information
     void addMatch(long id) {putative_off_seq_ids.push_back(id);}
