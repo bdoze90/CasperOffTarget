@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		04138EF820C5AB9B00410E4C /* FileOp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04138EF620C5AB9B00410E4C /* FileOp.cpp */; };
 		04A347EC20BDD0D100DEFA7A /* OffScoring.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */; };
+		04BE0C8F2139F1CC00CFB438 /* CSeqTranslate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE0C8D2139F1CC00CFB438 /* CSeqTranslate.cpp */; };
 		04BE428A2051A57800CD2118 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42892051A57800CD2118 /* main.cpp */; };
 		04BE42922051AA6F00CD2118 /* csprRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BE42902051AA6F00CD2118 /* csprRef.cpp */; };
 		04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04BECB00205C9660005B6DA7 /* RefSequences.cpp */; };
@@ -32,7 +33,8 @@
 		04138EF720C5AB9B00410E4C /* FileOp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileOp.hpp; sourceTree = "<group>"; };
 		04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OffScoring.cpp; sourceTree = "<group>"; };
 		04A347EB20BDD0D100DEFA7A /* OffScoring.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OffScoring.hpp; sourceTree = "<group>"; };
-		04A347ED20BE05E700DEFA7A /* Compression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Compression.h; sourceTree = "<group>"; };
+		04BE0C8D2139F1CC00CFB438 /* CSeqTranslate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CSeqTranslate.cpp; sourceTree = "<group>"; };
+		04BE0C8E2139F1CC00CFB438 /* CSeqTranslate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CSeqTranslate.hpp; sourceTree = "<group>"; };
 		04BE42862051A57800CD2118 /* CasperOffTarget */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CasperOffTarget; sourceTree = BUILT_PRODUCTS_DIR; };
 		04BE42892051A57800CD2118 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		04BE42902051AA6F00CD2118 /* csprRef.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = csprRef.cpp; sourceTree = "<group>"; };
@@ -84,7 +86,8 @@
 				04BECB0420605374005B6DA7 /* gRNA.hpp */,
 				04A347EA20BDD0D100DEFA7A /* OffScoring.cpp */,
 				04A347EB20BDD0D100DEFA7A /* OffScoring.hpp */,
-				04A347ED20BE05E700DEFA7A /* Compression.h */,
+				04BE0C8D2139F1CC00CFB438 /* CSeqTranslate.cpp */,
+				04BE0C8E2139F1CC00CFB438 /* CSeqTranslate.hpp */,
 			);
 			path = CasperOffTarget;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04BE428A2051A57800CD2118 /* main.cpp in Sources */,
+				04BE0C8F2139F1CC00CFB438 /* CSeqTranslate.cpp in Sources */,
 				04BECB02205C9660005B6DA7 /* RefSequences.cpp in Sources */,
 				04138EF820C5AB9B00410E4C /* FileOp.cpp in Sources */,
 				04A347EC20BDD0D100DEFA7A /* OffScoring.cpp in Sources */,
