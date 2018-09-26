@@ -23,6 +23,13 @@ class OffScoring {
 public:
     void loadCspr(csprRef*);
     void setOutputFile(std::string fn) {output.openWrite(fn);}
+    void settings(int m, double t, bool d, bool a) {
+        MISMATCHES = m;
+        THRESHOLD = t;
+        IS_DETAILED = d;
+        IS_AVERAGE = a;
+        
+    }
     
     //Key algorithm is called below (a bunch of loadPutative calls):
     void score(gRNA*);
@@ -45,6 +52,11 @@ private:
     double scoreStruct(offtarget, gRNA*);
     
 private:
+    double THRESHOLD;
+    int MISMATCHES;
+    bool IS_DETAILED;
+    bool IS_AVERAGE;
+    
     std::vector<std::vector<double>> Off_Matrix;
     /* Below are two hardcoded scoring functions.  In CASPER 2.0, make these not hardcoded but from the off settings. */
     double Ss_score(std::vector<int>);

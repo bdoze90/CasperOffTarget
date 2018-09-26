@@ -19,9 +19,13 @@ void OffScoring::loadCspr(csprRef *r) {
 void OffScoring::score(gRNA* myseq) {
     //Need to get the full uncompressed sequence for each of the putative off sequences
     double avgscore = 1-scorePutatives(myseq->returnPutativeMatches(), myseq);
-    output.write(myseq->get_sequence() + ",");
-    output.write(avgscore);
+    output.write(myseq->get_sequence() + ":");
+    if (IS_AVERAGE) { output.write(avgscore);}
     output.write("\n");
+    if (IS_DETAILED) {
+        output.write(myseq->offtargetscores());
+        output.write("\n");
+    }
 }
 
 
@@ -83,8 +87,9 @@ double OffScoring::scorePutatives(std::vector<long> offs,gRNA* onseq) {
     for (int i=0; i<decomposed_offs.size(); i++) {
         double singleScore = scoreStruct(decomposed_offs[i], onseq);
         if (singleScore < 1.0) {
-            onseq->addOffScore(1-singleScore);
-            std::cout << 1-singleScore << std::endl;
+            if (singleScore > THRESHOLD) {
+                onseq->addOffScore(singleScore, decomposed_offs[i].chromscaff, decomposed_offs[i].position ,decomposed_offs[i].sequence);
+            }
             score_tot += 1-singleScore;
             score_num++;
         }
@@ -108,7 +113,7 @@ double OffScoring::scoreStruct(offtarget oid, gRNA* on) {
             std::string mstr = std::string() + on_seq[i] + S.revcom(oid.sequence[i]);
             mismatch_id.push_back(mstr);
         }
-        if (mismatches.size()>5) {
+        if (mismatches.size()>MISMATCHES) {
             return 1.0;
         }
     }

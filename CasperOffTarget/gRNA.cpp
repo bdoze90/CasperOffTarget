@@ -20,3 +20,20 @@ bool gRNA::hasHits() {
         return true;
     } else { return false; }
 }
+
+void gRNA::addOffScore(double d, int c, long l, std::string s) {
+    offtargetwithscore myoff;
+    myoff.chromscaff = c;
+    myoff.position = l;
+    myoff.off_score = d;
+    myoff.sequence = s;
+    offhits.push_back(myoff);
+}
+
+std::string gRNA::offtargetscores() {
+    std::string return_string;
+    for (int i=0;i<offhits.size();i++) {
+        return_string += std::to_string(offhits[i].off_score) + "," + std::to_string(offhits[i].chromscaff) + "," + std::to_string(offhits[i].position) + "," + offhits[i].sequence + "\n";
+    }
+    return return_string;
+}

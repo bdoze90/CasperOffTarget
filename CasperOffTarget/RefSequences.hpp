@@ -32,7 +32,7 @@ public:
     
     //generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs
     void run_off_algorithm(int);
-    void generateScores(std::string,std::string); // calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
+    void generateScores(std::string,std::string,int,double,bool,bool); // calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
     
 private:
     void findSimilars(gRNA*);  //runs algorithm on individual target

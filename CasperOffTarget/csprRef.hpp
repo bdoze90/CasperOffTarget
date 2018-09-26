@@ -31,6 +31,8 @@ public:
     long multiStart() {return multistart;}
     std::vector<std::string> getMultis(long ind) {return multiLocs[ind];}
     
+    int chromCount() {return Chrpos.size();}
+    
 
 private:
     //Base info from the .cspr file. This is a long string that has every target in succession.

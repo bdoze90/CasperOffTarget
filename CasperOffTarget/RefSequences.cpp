@@ -66,7 +66,7 @@ void OnTargets::run_off_algorithm(int thr) {
     std::vector<gRNA*> base = base_seqs;
     /* Run 16 threads to get through all of the gRNAs in question */
     int i = 0;
-    while ((base.size()-i)/thr > 0) {
+    /*while ((base.size()-i)/thr > 0) {
         std::cout << "Remaining sequences to be searched: " << base.size()-i << "\r";
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
@@ -138,9 +138,9 @@ void OnTargets::run_off_algorithm(int thr) {
             running_threads[j]->join();
         }
         i+=thr;
-    }
+    }*/
     for (int k=i;k<base.size();k++) {
-        findSimilars(base[i]);
+        findSimilars(base[k]);
     }
     std::cout << "Done searching for putative matches. Beginning scoring process.                 " << std::endl; //spaces are to delete random numbers
 }
@@ -149,27 +149,30 @@ void OnTargets::run_off_algorithm(int thr) {
 void OnTargets::findSimilars(gRNA* seq) {
     //See if any subset of the sequence appears in the csprRef.reftargets object:
     // break input sequence into 4 subsequences:
-    for (int s=0;s<3;s++) {
-        std::string compare = seq->get_Csequence().substr(s,4);
-        unsigned long p_hit_loc = ref.AccessRefString()->find(compare);
-        if (p_hit_loc != std::string::npos) {
+    for (int s=0;s<6;s++) {
+        std::string compare = seq->get_Csequence().substr(s,3);
+        // Need to find all instances of the 3 character seed in the RefString:
+        size_t p_hit_loc = ref.AccessRefString()->find(compare,0);
+        while(p_hit_loc != std::string::npos) {
             long id = p_hit_loc / 8;
             seq->addMatch(id);
+            p_hit_loc = ref.AccessRefString()->find(compare,p_hit_loc+1);
         }
     }
 }
 
 /* This function generates off target scores for all of the sequences that were identifed in the inital searching function: FindSimilars */
-void OnTargets::generateScores(std::string settings_filename,std::string output_filename) {
+void OnTargets::generateScores(std::string settings_filename,std::string output_filename,int mismatches,double thres,bool det, bool avg) {
     FileOp sfile;
     sfile.open(settings_filename);
     // Initialize the offscoring class object with the FileOp class call
     OffScoring myoff;
+    myoff.settings(mismatches,thres,det,avg);
     myoff.loadCspr(&ref);
     myoff.setOutputFile(output_filename);
     // Run the full scoring algorithm on all of the preprocessed sequences
     for (int i=0;i<base_seqs.size();i++) {
-        std::cout << "Scoring " << double(i)/double(base_seqs.size()) << "% complete.            " << "\r"; // reports the percentage of scores remaining
+        std::cout << "Scoring " << (double(i)/double(base_seqs.size()))*100 << "% complete.            " << "\r"; // reports the percentage of scores remaining
         // check to see if this particular query has any putative off sequence hits:
         if (base_seqs[i]->hasHits()) {
             //now run the scoring algorithm by getting all the information

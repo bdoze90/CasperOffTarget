@@ -31,9 +31,6 @@ public:
     void addMatch(long id) {putative_off_seq_ids.push_back(id);}
     std::vector<long> returnPutativeMatches() {return putative_off_seq_ids;}
     
-    // Adding to off target vector offscores:
-    void addOffScore(double myoff) {offscores.push_back(myoff);}
-    
     //Tells you whether there were any putative hits found:
     bool hasHits();
     int numHits() {return putative_off_seq_ids.size();}
@@ -44,6 +41,15 @@ private:
     //Class containing decompression algorithms
     SeqTranslate S;
     
+    struct offtargetwithscore {
+        int chromscaff;
+        long position;
+        std::string sequence;
+        double off_score;
+    };
+    
+    std::vector<offtargetwithscore> offhits;  // Stores all the offtarget scores for the putative off_sequences
+    
 private:
     std::string compressed_location;
     int score;
@@ -52,8 +58,10 @@ private:
     // Below is the container that keeps track of all the matches that the algorithm finds for this target
     std::vector<long> putative_off_seq_ids;
     
-private:
-    std::vector<double> offscores;  // Stores all the offtarget scores for the putative off_sequences
+public:
+    // Adding to off target vector offscores:
+    void addOffScore(double, int, long, std::string);
+    std::string offtargetscores();
 
 };
 

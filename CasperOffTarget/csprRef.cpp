@@ -40,7 +40,8 @@ void csprRef::LoadcsprFile(std::string cspr) {
         //Determine whether the new line sets the start of a new Chromosome/Scaffold:
         } else if (line.find('>') != std::string::npos) {
             Chrpos.push_back(chromCounter);
-            chromCounter = 0;
+            std::cout << "Sequences from beginning to end of this Chromosome/Scaffold: " << chromCounter << std::endl;
+            //chromCounter = 0;
             
         //Passes all tests that it is truly a unique sequence line
         } else {
@@ -80,12 +81,11 @@ void csprRef::processMultis(FileOp myfile) {
 
 /* getChromScaf: Returns which chromosome/scaffold based on the index of the location */
 int csprRef::getChrScaf(long id) {
-    long t_index = id/8;
     int i = 0;
-    while (t_index < Chrpos[i]) {
+    while (id > Chrpos[i]) {
         i++;
     }
-    return Chrpos[i];
+    return i;
 }
 
 /* A method for splitting the repeats section. */
