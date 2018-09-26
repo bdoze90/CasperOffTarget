@@ -66,7 +66,7 @@ void OnTargets::run_off_algorithm(int thr) {
     std::vector<gRNA*> base = base_seqs;
     /* Run 16 threads to get through all of the gRNAs in question */
     int i = 0;
-    /*while ((base.size()-i)/thr > 0) {
+    while ((base.size()-i)/thr > 0) {
         std::cout << "Remaining sequences to be searched: " << base.size()-i << "\r";
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
@@ -138,7 +138,7 @@ void OnTargets::run_off_algorithm(int thr) {
             running_threads[j]->join();
         }
         i+=thr;
-    }*/
+    }
     for (int k=i;k<base.size();k++) {
         findSimilars(base[k]);
     }
