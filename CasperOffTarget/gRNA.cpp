@@ -14,6 +14,13 @@ std::string gRNA::get_Clocation() {
     return compressed_location;
 }
 
+void gRNA::set_seq(std::string seq) {
+    while(seq.size() < 8) {
+        seq = '|' + seq;
+    }
+    compressed_seq = seq;
+}
+
 //returns whether or not any putative hits were found somewhere on the genome.
 bool gRNA::hasHits() {
     if (putative_off_seq_ids.size() > 0) {

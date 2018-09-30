@@ -20,7 +20,7 @@ public:
     // setting information:
     void set_location(std::string s) { compressed_location = s;}
     void set_score(std::string s) { score = S.decompress_location(s);}
-    void set_seq(std::string s) {compressed_seq = s;}
+    void set_seq(std::string s);
     // retrieving information:
     std::string get_Clocation();
     int get_score() {return double(score);} // Convert to double so that the return value can be a fraction.

@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cassert>
 
 /* Class contains the operators for manipulating both generic files and the .cspr and target query file specific operations,
  * which are the two main types of files that are processed in this program. */

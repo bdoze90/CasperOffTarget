@@ -72,7 +72,7 @@ std::string SeqTranslate::revcom(std::string in) {
 
 /*character output for revcom.  Also called by the string revcom function. */
 char SeqTranslate::revcom(char c) {
-    char n;
+    char n = 'N';
     switch (c) {
         case 'A':
             n = 'T';

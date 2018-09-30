@@ -32,7 +32,8 @@ int main(int argc, const char * argv[]) {
     //Convert settings inputs into appropriate values:
     int NUM_MISMATCHES = std::stoi(std::string(argv[6]));
     double THRESHOLD = std::stod(std::string(argv[7]));
-    bool detailed, average = false;
+    bool detailed = false;
+    bool average = false;
     if (std::string(argv[8]).find('T') != std::string::npos) {
         detailed = true;
     }
