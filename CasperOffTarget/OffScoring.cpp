@@ -33,11 +33,11 @@ void OffScoring::score(gRNA* myseq) {
 
 /* scorePutatives takes the ids of all putative off target sequences, and loads all of the uncompressed information into
  * an offtarget struct.  It then passes this struct to the individual scoring algorithm.*/
-double OffScoring::scorePutatives(std::vector<long> offs,gRNA* onseq) {
+double OffScoring::scorePutatives(std::set<long> offs,gRNA* onseq) {
     std::vector<offtarget> decomposed_offs;
-    for (int i=0;i<offs.size();i++) {
+    for (auto it = offs.begin(); it != offs.end(); ++it) {
         offtarget myoff;
-        long id = offs.at(i);
+        long id = *it;
         // CHECK TO SEE IF MATCH IS IN THE REPEATS SECTION, THIS REQUIRES MULTIPLE FINAL SEQUENCES TO BE RETURNED:
         if (id > ref->multiStart()) {
             std::string c_base_seq = ref->AccessRefString()->substr(id*8,8);

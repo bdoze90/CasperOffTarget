@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <set>
 #include <math.h>
 #include "gRNA.hpp"
 #include "csprRef.hpp"
@@ -36,7 +37,7 @@ public:
 
 /* Parser and Temporary storage containers for storing the uncompressed putative off sequences */
 private:
-    double scorePutatives(std::vector<long>,gRNA*); // single target parser (all putatives)
+    double scorePutatives(std::set<long>,gRNA*); // single target parser (all putatives)
     struct offtarget {
         int chromscaff;
         long position;

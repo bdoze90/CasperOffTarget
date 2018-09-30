@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <set>
 #include <string>
 #include <thread>
 #include "CSeqTranslate.hpp"
@@ -28,8 +29,8 @@ public:
     std::string get_sequence() {return S.decompress(compressed_seq,20);}
     long get_location() {return S.decompress_location(compressed_location);}
     // setting off target information
-    void addMatch(long id) {putative_off_seq_ids.push_back(id);}
-    std::vector<long> returnPutativeMatches() {return putative_off_seq_ids;}
+    void addMatch(long id) {putative_off_seq_ids.insert(id);}
+    std::set<long> returnPutativeMatches() {return putative_off_seq_ids;}
     
     //Tells you whether there were any putative hits found:
     bool hasHits();
@@ -56,7 +57,7 @@ private:
     std::string compressed_seq;
     
     // Below is the container that keeps track of all the matches that the algorithm finds for this target
-    std::vector<long> putative_off_seq_ids;
+    std::set<long> putative_off_seq_ids;
     
 public:
     // Adding to off target vector offscores:
