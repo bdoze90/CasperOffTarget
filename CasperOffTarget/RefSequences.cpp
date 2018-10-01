@@ -67,7 +67,7 @@ void OnTargets::run_off_algorithm(int thr) {
     /* Run 16 threads to get through all of the gRNAs in question */
     int i = 0;
     while ((base.size()-i)/thr > 0) {
-        std::cout << "Percentatge of sequences searched: " << (i/base.size())*100 << "%            \r";
+        std::cout << "Percentatge of sequences searched: " << (double(i)/double(base.size()))*100 << "%            \r";
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
             findSimilars(base[i]);
@@ -171,12 +171,46 @@ void OnTargets::generateScores(std::string settings_filename,std::string output_
     myoff.loadCspr(&ref);
     myoff.setOutputFile(output_filename);
     // Run the full scoring algorithm on all of the preprocessed sequences
-    for (int i=0;i<base_seqs.size();i++) {
+    std::vector<gRNA*> base = base_seqs;
+    int i = 0;
+    while ((base_seqs.size()-i)/4 > 0) {
         std::cout << "Scoring " << (double(i)/double(base_seqs.size()))*100 << "% complete.            " << "\r"; // reports the percentage of scores remaining
-        // check to see if this particular query has any putative off sequence hits:
-        if (base_seqs[i]->hasHits()) {
-            //now run the scoring algorithm by getting all the information
-            myoff.score(base_seqs[i]);
+        std::vector<std::thread*> running_threads;
+        std::thread t0([this,&base,&myoff,&i]() {
+            // check to see if this particular query has any putative off sequence hits:
+            if (base[i]->hasHits()) {
+                //now run the scoring algorithm by getting all the information
+                myoff.score(base[i]);
+            }
+        });
+        std::thread t1([this,&base,&myoff,&i]() {
+            if (base[i+1]->hasHits()) {
+                myoff.score(base[i+1]);
+            }
+        });
+        std::thread t2([this,&base,&myoff,&i]() {
+            if (base[i+2]->hasHits()) {
+                myoff.score(base[i+2]);
+            }
+        });
+        std::thread t3([this,&base,&myoff,&i]() {
+            if (base[i+3]->hasHits()) {
+                myoff.score(base[i+3]);
+            }
+        });
+        running_threads.push_back(&t0);
+        running_threads.push_back(&t1);
+        running_threads.push_back(&t2);
+        running_threads.push_back(&t3);
+        // Join all the running threads before continuing into the next iteration of the loop
+        for (int j=0;j<running_threads.size();j++) {
+            running_threads[j]->join();
+        }
+        i+=4;
+    }
+    for (int k=i;k<base_seqs.size();k++) {
+        if (base[k]->hasHits()) {
+            myoff.score(base[k]);
         }
     }
 }

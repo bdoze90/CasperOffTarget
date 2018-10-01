@@ -20,8 +20,8 @@
  */
 
 //int argc, const char * argv[]
-int main(int argc, const char * argv[]) {
-    //std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Desktop/P1_offquery.txt", "False", "/Users/brianmendoza/Desktop/ecoeCas3.cspr","/Users/brianmendoza/Desktop/p1offtargets.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "True", "True" };
+int main() {
+    std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Desktop/P1_offquery.txt", "False", "/Users/brianmendoza/Desktop/ecoeCas3.cspr","/Users/brianmendoza/Desktop/p1offtargets.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "True", "True" };
     
     //Convert all input into std::string objects:
     std::string query_file = std::string(argv[1]);
@@ -55,6 +55,7 @@ int main(int argc, const char * argv[]) {
     otr.loadData(cspr_reference);
     otr.run_off_algorithm(16); // input should be the number of threads you want to generate and the output file
     otr.generateScores(settings_file,output_file,NUM_MISMATCHES,THRESHOLD,detailed,average);
+    std::cout << "All scores generated. Output file located at: " << output_file << std::endl;
     return 0;
 }
 
