@@ -30,9 +30,11 @@ public:
     void LoadTargetQuery(std::string);  // pass OFF_QUERY file to the class
     void set_base_seqs(std::vector<gRNA*> x) {base_seqs = x;}
     
-    //generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs
+    // calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
+    void ScoreSettings(std::string,std::string,int,double,bool,bool);
+    
+    //generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs and scores them with the scoring algorithm
     void run_off_algorithm(int);
-    void generateScores(std::string,std::string,int,double,bool,bool); // calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
     
 private:
     void findSimilars(gRNA*);  //runs algorithm on individual target

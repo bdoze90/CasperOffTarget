@@ -27,6 +27,16 @@ void OnTargets::loadData(std::string f_name) {
     ref.LoadcsprFile(f_name);
 }
 
+/* This function generates off target scores for all of the sequences that were identifed in the inital searching function: FindSimilars */
+void OnTargets::ScoreSettings(std::string settings_filename,std::string output_filename,int mismatches,double thres,bool det, bool avg) {
+    FileOp sfile;
+    sfile.open(settings_filename);
+    scoreGenerator.settings(mismatches,thres,det,avg);
+    scoreGenerator.loadCspr(&ref);
+    scoreGenerator.setOutputFile(output_filename);
+    
+}
+
 /* Grab the ontargets from the OFF_QUERY file */
 void OnTargets::LoadTargetQuery(std::string query_file) {
     FileOp fileop;
@@ -56,10 +66,7 @@ void OnTargets::LoadTargetQuery(std::string query_file) {
     fileop.closeFile();
 }
  
-/* ALGORITHMIC FUNCTIONS
- * run_off_algorithm
- * findSimilars
- * generateScores */
+/* ALGORITHMIC FUNCTIONS: run_off_algorithm calls instances of findSimilars which searches and calls the scoring function from OffScoring */
 
 void OnTargets::run_off_algorithm(int thr) {
     std::cout << "Running Off Target Algorithm for " << base_seqs.size() << " sequences..." << std::endl;
@@ -67,7 +74,7 @@ void OnTargets::run_off_algorithm(int thr) {
     /* Run 16 threads to get through all of the gRNAs in question */
     int i = 0;
     while ((base.size()-i)/thr > 0) {
-        std::cout << "Percentatge of sequences searched: " << (double(i)/double(base.size()))*100 << "%            \r";
+        std::cout << "Percentage of sequences scored: " << (double(i)/double(base.size()))*100 << "%            \r";
         std::vector<std::thread*> running_threads;
         std::thread t0([this,&base,&i]() {
             findSimilars(base[i]);
@@ -159,59 +166,12 @@ void OnTargets::findSimilars(gRNA* seq) {
             p_hit_loc = ref.AccessRefString()->find(compare,p_hit_loc+1);
         }
     }
+    // check to see if this particular query has any putative off sequence hits:
+    if (seq->hasHits()) {
+        //now run the scoring algorithm by getting all the information
+        scoreGenerator.score(seq);
+    }
+    delete seq;
 }
 
-/* This function generates off target scores for all of the sequences that were identifed in the inital searching function: FindSimilars */
-void OnTargets::generateScores(std::string settings_filename,std::string output_filename,int mismatches,double thres,bool det, bool avg) {
-    FileOp sfile;
-    sfile.open(settings_filename);
-    // Initialize the offscoring class object with the FileOp class call
-    OffScoring myoff;
-    myoff.settings(mismatches,thres,det,avg);
-    myoff.loadCspr(&ref);
-    myoff.setOutputFile(output_filename);
-    // Run the full scoring algorithm on all of the preprocessed sequences
-    std::vector<gRNA*> base = base_seqs;
-    int i = 0;
-    while ((base_seqs.size()-i)/4 > 0) {
-        std::cout << "Scoring " << (double(i)/double(base_seqs.size()))*100 << "% complete.            " << "\r"; // reports the percentage of scores remaining
-        std::vector<std::thread*> running_threads;
-        std::thread t0([this,&base,&myoff,&i]() {
-            // check to see if this particular query has any putative off sequence hits:
-            if (base[i]->hasHits()) {
-                //now run the scoring algorithm by getting all the information
-                myoff.score(base[i]);
-            }
-        });
-        std::thread t1([this,&base,&myoff,&i]() {
-            if (base[i+1]->hasHits()) {
-                myoff.score(base[i+1]);
-            }
-        });
-        std::thread t2([this,&base,&myoff,&i]() {
-            if (base[i+2]->hasHits()) {
-                myoff.score(base[i+2]);
-            }
-        });
-        std::thread t3([this,&base,&myoff,&i]() {
-            if (base[i+3]->hasHits()) {
-                myoff.score(base[i+3]);
-            }
-        });
-        running_threads.push_back(&t0);
-        running_threads.push_back(&t1);
-        running_threads.push_back(&t2);
-        running_threads.push_back(&t3);
-        // Join all the running threads before continuing into the next iteration of the loop
-        for (int j=0;j<running_threads.size();j++) {
-            running_threads[j]->join();
-        }
-        i+=4;
-    }
-    for (int k=i;k<base_seqs.size();k++) {
-        if (base[k]->hasHits()) {
-            myoff.score(base[k]);
-        }
-    }
-}
 
