@@ -20,8 +20,8 @@
  */
 
 //int argc, const char * argv[]
-int main() {
-    std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Dropbox/kfd_split/offquery_section21.txt", "False", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Desktop/section21.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "False", "True" };
+int main(int argc, const char * argv[]) {
+    //std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Dropbox/kfd_split/offquery_section21.txt", "False", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Desktop/section21.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "False", "True" };
     
     //Convert all input into std::string objects:
     std::string query_file = std::string(argv[1]);
