@@ -19,12 +19,12 @@ void OffScoring::loadCspr(csprRef *r) {
 void OffScoring::score(gRNA* myseq) {
     //Need to get the full uncompressed sequence for each of the putative off sequences
     double avgscore = 1-scorePutatives(myseq->returnPutativeMatches(), myseq);
-    output.write(myseq->get_sequence() + ":");
-    if (IS_AVERAGE) { output.write(avgscore);}
-    output.write("\n");
+    std::string lineoutput = myseq->get_sequence() + ":";
+    if (IS_AVERAGE) { lineoutput += std::to_string(avgscore);}
+    output.write(lineoutput + "\n");
     if (IS_DETAILED) {
-        output.write(myseq->offtargetscores());
-        output.write("\n");
+        lineoutput += myseq->offtargetscores();
+        output.write(lineoutput + "\n");
     }
 }
 
