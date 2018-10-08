@@ -19,9 +19,9 @@
  * Algorithm for NAGs: store them in files for common organisms and endonuclease combinations.  Otherwise just scan the genome for potential off targets irrespective of PAM.
  */
 
-//int argc, const char * argv[]
-int main() {
-    std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Desktop/offquerytest.txt", "False", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Desktop/MYOUPUT.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "False", "True" };
+//
+int main(int argc, const char * argv[]) {
+    //std::vector<std::string> argv = {"casperofftargetexec","/Users/brianmendoza/Desktop/offquerytest.txt", "False", "/Users/brianmendoza/Dropbox/JGI_CASPER/kfdspCas9.cspr","/Users/brianmendoza/Desktop/MYOUPUT.txt","/Users/brianmendoza/Desktop/CASPERinfo", "4", "0.05", "False", "True" };
     
     //Convert all input into std::string objects:
     std::string query_file = std::string(argv[1]);
