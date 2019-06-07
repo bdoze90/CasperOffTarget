@@ -24,6 +24,10 @@
 void csprRef::LoadcsprFile(std::string cspr) {
     FileOp myfile;
     myfile.open(cspr);
+    //Skip the first three lines of the GENOME, KARYSTATS, and NOTES
+    myfile.getLine(1000);
+    myfile.getLine(10000);
+    myfile.getLine(1000);
     long chromCounter = 0;
     while (true) {
         std::string line = myfile.getLine(100);  //No line should be longer than 100 characters
