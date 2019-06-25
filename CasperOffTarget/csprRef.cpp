@@ -3,10 +3,11 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 3/8/18.
-//  Copyright Â© 2018 University of Tennessee. All rights reserved.
+//  Copyright © 2018 University of Tennessee. All rights reserved.
 //
 
-#include "csprRef.hpp"
+#include "pch.h"
+#include "csprRef.h"
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -22,84 +23,85 @@
  * Function: This file takes in all the lines of the files and first stores it in a basic string vector.  Then the function
  * parses this string into appropriate containers for easier access in the OnTargets class. */
 void csprRef::LoadcsprFile(std::string cspr) {
-    FileOp myfile;
-    myfile.open(cspr);
-    //Skip the first three lines of the GENOME, KARYSTATS, and NOTES
-    myfile.getLine(1000);
-    myfile.getLine(10000);
-    myfile.getLine(1000);
-    long chromCounter = 0;
-    while (true) {
-        std::string line = myfile.getLine(100);  //No line should be longer than 100 characters
-    
-        //Determine if we have moved to the repeats section of the file:
-        if (line.find("REPEATS") != std::string::npos) {
-            // consolidate the id of the last unique by getting the length of the Locs vector:
-            multistart = Locs.size();
-            std::cout << "Reached Repeats section. Moving on to process repeat structure.\n";
-            Chrpos.push_back(chromCounter); // end of Chrpos tells you the start of the Repeats section.
-            processMultis(myfile);
-            break;
-    
-        //Determine whether the new line sets the start of a new Chromosome/Scaffold:
-        } else if (line.find('>') != std::string::npos) {
-            Chrpos.push_back(chromCounter);
-            std::cout << "Sequences from beginning to end of this Chromosome/Scaffold: " << chromCounter << std::endl;
-            //chromCounter = 0;
-            
-        //Passes all tests that it is truly a unique sequence line
-        } else {
-            std::vector<std::string> target = Msplit(line, ',');  //Split up the line
-            Locs.push_back(S.decompress_location(target[0]));  //Add compressed location to Locs vector
-            Scores.push_back(S.decompress_location(target[2]));  //Add decompressed score to Scores vector
-            RefTargets += target[1].substr(0,8);  //Add the sequence to the long sequence string
-            chromCounter ++; //keeps track of how many targets are in the chromosome/scaffold
-        }
-    }
-    myfile.closeFile();
+	std::ifstream myfile;
+	myfile.open(cspr,std::ifstream::in);
+	long chromCounter = 0;
+	while (true) {
+		std::string line;
+ 		std::getline(myfile,line);  //No line should be longer than 100 characters
+		//Determine if we have moved to the repeats section of the file:
+		if (line.find("REPEATS") != std::string::npos) {
+			// consolidate the id of the last unique by getting the length of the Locs vector:
+			multistart = Locs.size();
+			std::cout << "Reached Repeats section. Moving on to process repeat structure.\n";
+			Chrpos.push_back(chromCounter); // end of Chrpos tells you the start of the Repeats section.
+			processMultis(&myfile);
+			break;
+
+			//Determine whether the new line sets the start of a new Chromosome/Scaffold:
+		}
+		else if (line.find('>') != std::string::npos) {
+			Chrpos.push_back(chromCounter);
+			std::cout << "Sequences from beginning to end of this Chromosome/Scaffold: " << chromCounter + 1 << std::endl;
+			//chromCounter = 0;
+
+		//Passes all tests that it is truly a unique sequence line
+		}
+		else {
+			std::vector<std::string> target = Msplit(line, ',');  //Split up the line
+			Locs.push_back(S.decompress_location(target[0]));  //Add compressed location to Locs vector
+			Scores.push_back(S.decompress_location(target[2]));  //Add decompressed score to Scores vector
+			RefTargets += target[1].substr(0, 8);  //Add the sequence to the long sequence string
+			chromCounter++; //keeps track of how many targets are in the chromosome/scaffold
+		}
+	}
+	myfile.close();
 }
 
 /* Code for processing the Repeats section which requires different processing of the locations and sequences */
-void csprRef::processMultis(FileOp myfile) {
-    while (true) {
-        std::string line = myfile.getLine(15); //This line is just the seed sequence
-        if (line.find("END_OF") != std::string::npos) {
-            std::cout << "Reached the end of the file. \n";
-            break;
-        }
-        // Add the marker that differentiates the seed from the filler:
-        line = '!' + line;
-        // Add remaining filler to the seed:
-        for (int i=line.size();i<8;i++) {
-            line = '|' + line;
-        }
-        // Save the seed
-        RefTargets += line;
-        // Get all tails and locations/scores associated with the seed.  Much longer line to accomodate all the tails.
-        std::vector<std::string> tails = myfile.getSepLine(50000,'\t');
-        tails.pop_back(); // there is an extra \t in the .cspr file, this fixes this problem.
-        multiLocs.push_back(tails);
-    }
+void csprRef::processMultis(std::ifstream* myfile) {
+	while (true) {
+		std::string line;
+		std::getline(*myfile, line); //This line is just the seed sequence
+		if (line.find("END_OF") != std::string::npos) {
+			std::cout << "Reached the end of the file. \n";
+			break;
+		}
+		// Add the marker that differentiates the seed from the filler:
+		line = '!' + line;
+		// Add remaining filler to the seed:
+		for (int i = line.size();i < 8;i++) {
+			line = '|' + line;
+		}
+		// Save the seed
+		RefTargets += line;
+		// Get all tails and locations/scores associated with the seed.  Much longer line to accomodate all the tails.
+		char tailarray[50000];
+		myfile->getline(tailarray, 50000);
+		std::vector<std::string> tails = Msplit(std::string(tailarray), '\t');
+		tails.pop_back(); // there is an extra \t in the .cspr file, this fixes this problem.
+		multiLocs.push_back(tails);
+	}
 }
 
 
 /* getChromScaf: Returns which chromosome/scaffold based on the index of the location */
 int csprRef::getChrScaf(long id) {
-    int i = 0;
-    while (id > Chrpos[i]) {
-        i++;
-    }
-    return i;
+	int i = 0;
+	while (id > Chrpos[i]) {
+		i++;
+	}
+	return i;
 }
 
 /* A method for splitting the repeats section. */
 std::vector<std::string> csprRef::Msplit(const std::string &text, char sep) {
-    std::vector<std::string> tokens;
-    std::size_t start = 0, end = 0;
-    while ((end = text.find(sep, start)) != std::string::npos) {
-        tokens.push_back(text.substr(start, end - start));
-        start = end + 1;
-    }
-    tokens.push_back(text.substr(start));
-    return tokens;
+	std::vector<std::string> tokens;
+	std::size_t start = 0, end = 0;
+	while ((end = text.find(sep, start)) != std::string::npos) {
+		tokens.push_back(text.substr(start, end - start));
+		start = end + 1;
+	}
+	tokens.push_back(text.substr(start));
+	return tokens;
 }
