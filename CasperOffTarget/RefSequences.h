@@ -24,6 +24,8 @@
 class OnTargets {
 public:
 	//OnTargets();
+	int se_l = 0;
+	int seq_l = 0;
 	void loadData(std::string); //pass filename of .cspr file for reference
 	void compressed(bool t) { is_compressed = t; }
 
@@ -31,7 +33,7 @@ public:
 	void set_base_seqs(std::vector<gRNA*> x) { base_seqs = x; }
 
 	// calls the scoring algorithm iterating through putative_off_seqs (passed object is settings file)
-	void ScoreSettings(std::string, std::string, int, double, bool, bool);
+	void ScoreSettings(std::string, std::string, int, double, bool, bool, string);
 
 	//generic algorithm that loops through all targets calling findSimilars. Initiates threads. Iterates through base_seqs and scores them with the scoring algorithm
 	void run_off_algorithm(int);

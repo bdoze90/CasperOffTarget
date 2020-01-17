@@ -18,6 +18,8 @@
 
 class gRNA {
 public:
+	int seed_l = 0;
+	int seq_l = 0;
 	// setting information:
 	void set_location(std::string s) { compressed_location = s; }
 	void set_score(std::string s) { score = S.decompress_location(s); }
@@ -26,7 +28,7 @@ public:
 	std::string get_Clocation();
 	int get_score() { return double(score); } // Convert to double so that the return value can be a fraction.
 	std::string get_Csequence() { return compressed_seq; }
-	std::string get_sequence() { return S.decompress(compressed_seq, 20); }
+	std::string get_sequence() { return S.decompress(compressed_seq, seq_l); }
 	long get_location() { return S.decompress_location(compressed_location); }
 	// setting off target information
 	void addMatch(long id) { putative_off_seq_ids.insert(id); }

@@ -49,7 +49,7 @@ private:
 	long multistart;
 
 private:
-	void processMultis(std::ifstream*);
+	void processMultis(std::ifstream&);
 	std::vector<std::string> Msplit(const std::string &text, char sep);
 
 	SeqTranslate S;

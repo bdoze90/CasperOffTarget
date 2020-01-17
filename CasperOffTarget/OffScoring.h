@@ -6,6 +6,8 @@
 //  Copyright © 2018 University of Tennessee. All rights reserved.
 //
 
+using namespace std;
+
 #ifndef OffScoring_h
 #define OffScoring_h
 
@@ -19,11 +21,26 @@
 #include "csprRef.h"
 #include "CSeqTranslate.h"
 #include "FileOp.h"
+#include <algorithm>
+#include <sstream>
 
 class OffScoring {
 public:
-	void loadCspr(csprRef*);
-	void setOutputFile(std::string fn) { output.openWrite(fn); }
+	int sequence_length;
+	int seed_length;
+	void loadCspr(csprRef*, string, string);
+	void setOutputFile(std::string fn) 
+	{
+		output.openWrite(fn); 
+		if(IS_AVERAGE)
+		{ 
+			output.write("AVG OUTPUT\n");
+		}
+		else
+		{
+			output.write("DETAILED OUTPUT\n");
+		}
+	}
 	void settings(int m, double t, bool d, bool a) {
 		MISMATCHES = m;
 		THRESHOLD = t;
@@ -71,7 +88,89 @@ private:
 	/* Below is the hardcoded matrix elements from the Hsu matrix.  In CASPER 2.0 we would like to change these to more generalizeable features. */
 private:
 	std::map<std::string, std::vector<double>> Hsu_Matrix;
-	void fillHsumatrix() {
+	void fillHsumatrix(string cspr_file, string casper_file) 
+	{
+		ifstream file;
+		string endo_name = cspr_file.substr(cspr_file.find_last_of('\\') + 1, cspr_file.size());
+		endo_name = endo_name.substr(0, endo_name.find('.'));
+		endo_name = endo_name.substr(endo_name.find('_')+1, endo_name.size());
+		file.open(casper_file);
+		string str = "";
+		int i = 0;
+		
+		while (getline(file, str)) 
+		{
+			if (str.find("MATRIX-" + endo_name) != string::npos)
+			{
+				str.erase(remove(str.begin(), str.end(), '\n'), str.end());
+				getline(file,str);
+				while (str != "")
+				{
+					float n;
+					stringstream stream(str);
+					while (stream >> n) 
+					{
+						if (i == 0) 
+						{
+							Hsu_Matrix["GT"].push_back(n);
+						}
+						else if(i == 1)
+						{
+							Hsu_Matrix["AC"].push_back(n);
+						}
+						else if (i == 2)
+						{
+							Hsu_Matrix["GG"].push_back(n);
+						}
+						else if (i == 3)
+						{
+							Hsu_Matrix["TG"].push_back(n);
+						}
+						else if (i == 4)
+						{
+							Hsu_Matrix["TT"].push_back(n);
+						}
+						else if (i == 5)
+						{
+							Hsu_Matrix["CA"].push_back(n);
+						}
+						else if (i == 6)
+						{
+							Hsu_Matrix["CT"].push_back(n);
+						}
+						else if (i == 7)
+						{
+							Hsu_Matrix["GA"].push_back(n);
+						}
+						else if (i == 8)
+						{
+							Hsu_Matrix["AA"].push_back(n);
+						}
+						else if (i == 9)
+						{
+							Hsu_Matrix["AG"].push_back(n);
+						}
+						else if (i == 10)
+						{
+							Hsu_Matrix["TC"].push_back(n);
+						}
+						else if (i == 11)
+						{
+							Hsu_Matrix["CC"].push_back(n);
+						}
+					}
+					
+					i += 1;
+					getline(file, str);
+				
+				}
+			}
+		}
+		
+		file.close();
+
+		
+		/*
 		Hsu_Matrix["GT"] = { 1, 1.6533,0.9030,1.5977,0.9235,0.8070,0.9632,1.0163,0.2658,0.7119,1.5211,0.6942,1.0434,0.5255,0.8981,0.7164,0.8399,0.5376,0.2821,0.6898 };
 		Hsu_Matrix["AC"] = { 1, 1.5142,1.1597,1.6582,0.9924,0.0247,0.5522,1.8687,0.7737,0.9270,0.7292,0.4842,0.4824,0.7060,1.0221,0.0181,0.3496,0.1811,0.1362,0.2700 };
 		Hsu_Matrix["GG"] = { 1, 1.3234,1.4157,1.2967,1.2060,0.9524,0.2304,1.0163,0.8100,1.1559,0.7075,1.5791,0.3490,0.0899,0.0497,0.0045,0.2267,0.2153,0.5250,0.4965 };
@@ -84,6 +183,7 @@ private:
 		Hsu_Matrix["AG"] = { 1, 1.4786,1.0820,1.2952,0.7450,0.9763,0.4912,0.9272,0.6022,1.0375,0.3047,0.8210,0.0303,0.0365,0.0592,0.0253,0.1553,0.1006,0.2175,0.0275 };
 		Hsu_Matrix["TC"] = { 1, 1.0400,0.9954,1.6466,1.3410,0.0102,0.5428,2.3401,0.4367,0.2143,0.3405,0.2640,0.0935,0.0462,0.0688,0.0165,0.3659,0.0546,0.0857,0.2543 };
 		Hsu_Matrix["CC"] = { 1, 1.0345,1.0478,1.0507,1.4075,0.0540,0.6396,2.0810,0.4585,0.1555,0.1369,0.1026,0.0417,0.0105,0.0458,0.0099,0.2114,0.0552,0.0253,0.0596 };
+		*/
 	}
 };
 

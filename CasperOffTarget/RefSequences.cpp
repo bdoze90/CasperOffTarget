@@ -19,6 +19,8 @@
 #include "csprRef.h"
 #include "OffScoring.h"
 
+using namespace std;
+
 /* CONTAINER AND DATA MANIPULATION FUNCTIONS
  * loadData
  * LoadTargetQuery */
@@ -29,11 +31,11 @@ void OnTargets::loadData(std::string f_name) {
 }
 
 /* This function generates off target scores for all of the sequences that were identifed in the inital searching function: FindSimilars */
-void OnTargets::ScoreSettings(std::string settings_filename, std::string output_filename, int mismatches, double thres, bool det, bool avg) {
+void OnTargets::ScoreSettings(std::string settings_filename, std::string output_filename, int mismatches, double thres, bool det, bool avg, string cspr_file) {
 	//FileOp sfile;
 	fileop.open(settings_filename);
 	scoreGenerator.settings(mismatches, thres, det, avg);
-	scoreGenerator.loadCspr(&ref);
+	scoreGenerator.loadCspr(&ref, cspr_file, settings_filename);
 	scoreGenerator.setOutputFile(output_filename);
 	fileop.closeFile();
 }
@@ -76,14 +78,27 @@ void OnTargets::LoadTargetQuery(std::string query_file) {
 /* ALGORITHMIC FUNCTIONS: run_off_algorithm calls instances of findSimilars which searches and calls the scoring function from OffScoring */
 
 void OnTargets::run_off_algorithm(int thr) {
-	std::cout << "Running Off Target Algorithm for " << base_seqs.size() << " sequences..." << std::endl;
+	std::cout << "Running Off Target Algorithm for " << base_seqs.size() << " sequences... " << std::endl;
 	std::vector<gRNA*> base = base_seqs;
 	/* Run 16 threads to get through all of the gRNAs in question */
 	int i = 0;
+	int total_size = base.size();
+	scoreGenerator.seed_length = se_l;
+	scoreGenerator.sequence_length = seq_l;
+	
+	
+	for (int j = 0; j < base.size(); j++)
+	{
+		std::cout << "Percentage of sequences scored: " << (double(j) / double(base.size())) * 100 << "%" << std::endl;
+		findSimilars(base[j]);
+	}
+	
+	/*
 	while ((base.size() - i) / thr > 0) {
-		std::cout << "Percentage of sequences scored: " << (double(i) / double(base.size())) * 100 << "%            \r";
+		std::cout << "Percentage of sequences scored: " << (double(i) / double(base.size())) * 100 << "%" << std::endl;
 		std::vector<std::thread*> running_threads;
-		std::thread t0([this, &base, &i]() {
+		std::thread t0([this, &base, &i]() 
+		{
 			findSimilars(base[i]);
 		});
 		std::thread t1([this, &base, &i]() {
@@ -153,9 +168,17 @@ void OnTargets::run_off_algorithm(int thr) {
 		}
 		i += thr;
 	}
+	
+	*/
+	/*
 	for (int k = i;k < base.size();k++) {
+		cout << << endl;
 		findSimilars(base[k]);
 	}
+	*/
+	
+	std::cout << "Percentage of sequences scored: " << "100.00%" << std::endl;
+
 	std::cout << "Done searching for putative matches. Beginning scoring process.                 " << std::endl; //spaces are to delete random numbers
 }
 

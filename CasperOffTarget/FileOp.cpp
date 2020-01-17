@@ -34,7 +34,7 @@ bool FileOp::endFile()
  integer. */
 std::string FileOp::getLine(int l)
 {
-	char nts[10000];
+	char nts[5000000];
 	FileStream->getline(nts,l);
 	return std::string(nts);
 }
