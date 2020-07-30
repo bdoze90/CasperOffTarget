@@ -2,7 +2,10 @@
 
 **Mac and Linux**:
 1. Download Boost v1.73 .gz folder (in Google Drive)
-
+2. Extract boost files to "boost_1_73_0" folder
+3. Prepare the installer by running `./bootstrap.sh --with-libraries=atomic,chrono,context,coroutine,date_time,exception,filesystem,graph,graph_parallel,iostreams,locale,log,math,mpi,program_options,random,regex,serialization,system,test,thread,timer,wave`
+4. If on Linux, install prerequisites for the iostreams: `sudo apt-get install libbz2-dev`
+5. Build boost with the following command: `sudo ./b2 install`
 
 **Windows (Visual Studio 2017)**:
 1. Download Boost v1.73 .zip folder (in Google Drive)
