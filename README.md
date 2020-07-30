@@ -5,14 +5,14 @@
 	-
 
 **Windows (Visual Studio 2017)**:
-	- Download Boost v1.73 .zip folder (in Google Drive)
-	- Download zlib v1.2.11 .zip folder (in Google Drive)
-	- Extract boost files to folder "boost_1_73_0"
-	- Extract zlib files to folder "zlib-1.2.11"
-	- Open CMD
-	- CD to "boost_1_73_0" or wherever the boost files were extracted to
-	- Run the following command : "bootstrap.bat --with-libraries=atomic,chrono,context,coroutine,date_time,exception,filesystem,graph,graph_parallel,iostreams,locale,log,math,mpi,program_options,random,regex,serialization,system,test,thread,timer,wave"
-	- Build the boost library with the following command (works with Visual Studio 2017) :  "b2 -j15 --toolset=msvc --build-type=complete stage -s ZLIB_SOURCE="C:\Path\To\zlib-1.2.11" -s ZLIB_INCLUDE="C:\Path\To\zlib-1.2.11""
+	1. Download Boost v1.73 .zip folder (in Google Drive)
+	2. Download zlib v1.2.11 .zip folder (in Google Drive)
+	3. Extract boost files to folder "boost_1_73_0"
+	4. Extract zlib files to folder "zlib-1.2.11"
+	5. Open CMD
+	6. CD to "boost_1_73_0" or wherever the boost files were extracted to
+	7. Run the following command : "bootstrap.bat --with-libraries=atomic,chrono,context,coroutine,date_time,exception,filesystem,graph,graph_parallel,iostreams,locale,log,math,mpi,program_options,random,regex,serialization,system,test,thread,timer,wave"
+	8. Build the boost library with the following command (works with Visual Studio 2017) :  "b2 -j15 --toolset=msvc --build-type=complete stage -s ZLIB_SOURCE="C:\Path\To\zlib-1.2.11" -s ZLIB_INCLUDE="C:\Path\To\zlib-1.2.11""
 
 
 
