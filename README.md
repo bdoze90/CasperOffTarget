@@ -1,3 +1,5 @@
+# **Google Drive Link**
+
 # **Download and Compile Boost v1.73**
 
 **Mac and Linux**:
@@ -37,17 +39,17 @@
 
 # **Download and Compile OT**
 **Linux (if you used apt-get install sqlite3)**:
-1. Download OT source code for Linux (in Google Drive)
+1. Download OT source code for Linux (in Repository)
 2. CD to OT source code folder
 3. Run Command to compile OT: `g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread -lsqlite3 -lboost_system -lboost_iostreams -o OT`
 
 **Mac and Linux (if you manually built sqlite3 .o file, make sure sqlite3 .o file is in same folder as OT source code)**:
-1. Download OT source code for Mac or Linux (in Google Drive)
+1. Download OT source code for Mac or Linux (in Repository)
 2. CD to OT source code folder
 3. Run command to compile OT: `g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread sqlite3.o -lboost_system -lboost_iostreams -o OT`
 
 **Windows (Visual Studio 2017)**:
-1. Download OT source for Windows (in Google Drive)
+1. Download OT source for Windows (in Repository)
 2. Open Visual Studio 2017
 3. Create a New Project
 4. Import the OT source code files
