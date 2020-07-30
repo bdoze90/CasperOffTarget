@@ -66,3 +66,6 @@
 	
 
 # **How to run OT**
+1. CD to the directory containing the OT executables
+2. The command line arguments are as follows: `query_file cspr_file db_file, output_file CASPERinfo_file num_mismatches threshold detailed_output_bool avg_output_bool`
+3. Example command: `./OT query.txt ath_asCas12.cspr ath_asCas12_repeats.db output.txt CASPERinfo 5 0.05 True False`
