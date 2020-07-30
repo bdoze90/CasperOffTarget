@@ -1,6 +1,12 @@
 # **Google Drive Link**
 https://drive.google.com/drive/folders/1D08TUE-7Jbl2cNmLnid-oX9u14z8g9hm?usp=sharing
 
+# **Off Target Executales**
+* Executables for OT are already compiled and located in the Google Drive provided above. Once in the Google Drive, navigate to your OS folder, and executables are located in the "Old" and "New" folders.
+* The "Old" folder holds the executables for the old version of OT that uses the original compression format of .cspr files.
+* The "New" folder holds the executables for the new version of OT that uses gzip compressed .cspr files, and .db files for repeat data.
+* If you want to build the OT source code from scratch you'll need the Boost, Sqlite3, and Zlib libraries. You can follow the following sections for building the libraries and for building OT; otherwise, skip to the "How to use OT" section to see the command line arguments needed for OT.
+
 # **Download and Compile Boost v1.73**
 
 **Mac and Linux**:
@@ -73,6 +79,8 @@ https://drive.google.com/drive/folders/1D08TUE-7Jbl2cNmLnid-oX9u14z8g9hm?usp=sha
 	
 
 # **How to run OT**
-1. CD to the directory containing the OT executables
-2. The command line arguments are as follows: `query_file cspr_file db_file, output_file CASPERinfo_file num_mismatches threshold detailed_output_bool avg_output_bool`
-3. Example command: `./OT query.txt ath_asCas12.cspr ath_asCas12_repeats.db output.txt CASPERinfo 5 0.05 True False`
+* CD to the directory containing the OT executable
+	* The command line arguments for the new OT are as follows: `query_file cspr_file db_file output_file CASPERinfo_file num_mismatches threshold detailed_output_bool avg_output_bool`
+	* The command line arguments for the old OT are as follows: `query_file is_compressed_bool cspr_file output_file CASPERinfo_file num_mismatches threshold detailed_output_bool avg_output_bool`
+* Example command (New OT): `./OT query.txt ath_asCas12.cspr ath_asCas12_repeats.db output.txt CASPERinfo 5 0.05 True False`
+* Example command (Old OT): `./OT query.txt True ath_asCas12.cspr output.txt CASPERinfo 5 0.05 True False`
