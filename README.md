@@ -32,17 +32,19 @@
 
 
 
-# **Compile OT**
+# ** Download and Compile OT**
 **Linux (if you used apt-get install sqlite3)**:
-
-* g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread -lsqlite3 -lboost_system -lboost_iostreams -o OT
+1. Download OT source code for Linux (available in Google Drive)
+2. CD to OT source code folder
+3. Run Command to compile OT: g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread -lsqlite3 -lboost_system -lboost_iostreams -o OT
 
 **Mac and Linux (if you manually built sqlite3 .o file, make sure sqlite3 .o file is in same folder as OT source code)**:
-
-* g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread sqlite3.o -lboost_system -lboost_iostreams -o OT
+1. Download OT source code for Mac or Linux (available in Google Drive)
+2. CD to OT source code folder
+3. Run command to compile OT: g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread sqlite3.o -lboost_system -lboost_iostreams -o OT
 
 **Windows (Visual Studio 2017)**:
-* Set the following settings in VS (make setting changes apply to all releases):
+1. Set the following settings in VS (make setting changes apply to all releases):
 	* Make sure release is x86 (32-bit)
 	* Build project. 
 	* .exe should be in project folder for Visual Studio
