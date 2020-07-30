@@ -32,7 +32,7 @@
 
 
 
-# ** Download and Compile OT**
+# **Download and Compile OT**
 **Linux (if you used apt-get install sqlite3)**:
 1. Download OT source code for Linux (available in Google Drive)
 2. CD to OT source code folder
