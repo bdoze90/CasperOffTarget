@@ -29,24 +29,36 @@
 
 **Windows**:
 1. Download sqlite3 source code (also available in Google Drive)
-
+`lib /DEF:sqlite3.def /OUT:sqlite3.lib /MACHINE:x64`
 
 
 # **Download and Compile OT**
 **Linux (if you used apt-get install sqlite3)**:
-1. Download OT source code for Linux (available in Google Drive)
+1. Download OT source code for Linux (in Google Drive)
 2. CD to OT source code folder
 3. Run Command to compile OT: `g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread -lsqlite3 -lboost_system -lboost_iostreams -o OT`
 
 **Mac and Linux (if you manually built sqlite3 .o file, make sure sqlite3 .o file is in same folder as OT source code)**:
-1. Download OT source code for Mac or Linux (available in Google Drive)
+1. Download OT source code for Mac or Linux (in Google Drive)
 2. CD to OT source code folder
 3. Run command to compile OT: `g++ -std=c++11 CasperOffTargetWindows.cpp CSeqTranslate.cpp csprRef.cpp FileOp.cpp gRNA.cpp OffScoring.cpp pch.cpp RefSequences.cpp -pthread sqlite3.o -lboost_system -lboost_iostreams -o OT`
 
 **Windows (Visual Studio 2017)**:
-1. Set the following settings in VS (make setting changes apply to all releases):
-	* Make sure release is x86 (32-bit)
-	* Build project. 
-	* .exe should be in project folder for Visual Studio
+1. Download OT source for Windows (in Google Drive)
+2. Open Visual Studio 2017
+3. Create a New Project
+4. Import the OT source code files
+5. Go to Project->Properties and do the following:
+	* Set Configuration to "All Configurations"
+	* Set Platform to "All Platforms"
+	* In Configuration Properties->VC++ Directories add `C:\Path\To\boost_1_73_0;C:\Path\To\sqlite3;` to "Include Directories"
+	* In Configuration Properties->VC++ Directories add `C:\Path\To\boost_1_73_0\stage\lib;C:\Path\To\sqlite;` to "Include Libraries"
+	* In C/C++->General add `C:\Path\To\boost_1_73_0;C:\Path\To\sqlite3;` to "Additional Include Directories" and "Additional #using Directories"
+	* In Linker->General add `C:\Path\To\boost_1_73_0\stage\lib;C:\Path\To\sqlite;` to "Additional Library Directories"
+	* In Linker->Input add `C:\Path\To\sqlite\sqlite3.lib;` in "Additonaly Dependencies
+	* Make sure when you add these paths that there are ';' seperating all paths/object in the line.
+6. For debugging, make sure Debug and x86 are selected before running
+7. For compiling, make sure Release and x86 are selected before running
+	
 
 
