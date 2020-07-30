@@ -1,4 +1,4 @@
-#**Download and Compile Boost v1.73**
+# **Download and Compile Boost v1.73**
 
 Mac and Linux:
 	- Download Boost v1.73 .gz folder (in Google Drive)
