@@ -4,7 +4,7 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 3/8/18.
-//  Copyright © 2018 University of Tennessee. All rights reserved.
+//  Copyright Â© 2018 University of Tennessee. All rights reserved.
 //
 
 #include "pch.h"
@@ -59,7 +59,7 @@ int main(int argc, const char * argv[]) {
 
 	//get seed_length and seq_length from CASPERinfo file using endo on .cspr file
 	ifstream file;
-	string endo_name = cspr_reference.substr(cspr_reference.find_last_of('\\') + 1, cspr_reference.size());
+	string endo_name = cspr_reference.substr(cspr_reference.find_last_of("/\\") + 1, cspr_reference.size());
 	endo_name = endo_name.substr(0, endo_name.find('.'));
 	endo_name = endo_name.substr(endo_name.find('_') + 1, endo_name.size());
 	file.open(settings_file);
