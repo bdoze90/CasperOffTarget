@@ -4,7 +4,7 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 3/8/18.
-//  Copyright Â© 2018 University of Tennessee. All rights reserved.
+//  Copyright © 2018 University of Tennessee. All rights reserved.
 //
 
 #include "pch.h"
@@ -38,7 +38,8 @@ vector<string> split(string strToSplit, char delimeter)
 //int argc, const char * argv[]
 int main(int argc, const char * argv[]) {
 	
-	//argv: query file, is_compressed (T/F), cspr file, db file, output file, CASPERinfo, num_mismatches, threshold, detailed ouptut (T/F), avg output (T/F)
+	//argv: query file, cspr file, db file, output file, CASPERinfo, num_mismatches, threshold, detailed ouptut (T/F), avg output (T/F)
+	//vector<string> argv = {"EXE", "C:\\Users\\Tfry\\Desktop\\New_OT\\temp_uncomp.txt", "C:\\Users\\Tfry\\Desktop\\New_OT\\ath_asCas12.cspr", "C:\\Users\\Tfry\\Desktop\\New_OT\\ath_asCas12_repeats.db", "C:\\Users\\Tfry\\Desktop\\New_OT\\output.txt", "C:\\Users\\Tfry\\Desktop\\CASPERinfo", "5", "0.05", "TRUE", "FALSE"};
 	//Convert all input into string objects:
 	string query_file = string(argv[1]);
 	string cspr_reference = string(argv[2]);
@@ -59,7 +60,7 @@ int main(int argc, const char * argv[]) {
 
 	//get seed_length and seq_length from CASPERinfo file using endo on .cspr file
 	ifstream file;
-	string endo_name = cspr_reference.substr(cspr_reference.find_last_of("/\\") + 1, cspr_reference.size());
+	string endo_name = cspr_reference.substr(cspr_reference.find_last_of('\\') + 1, cspr_reference.size());
 	endo_name = endo_name.substr(0, endo_name.find('.'));
 	endo_name = endo_name.substr(endo_name.find('_') + 1, endo_name.size());
 	file.open(settings_file);
@@ -98,7 +99,7 @@ int main(int argc, const char * argv[]) {
 	
 	cout << "All scores generated. Output file located at: " << output_file << endl;
 	
-
+	//system("pause");
 	return 0;
 }
 
