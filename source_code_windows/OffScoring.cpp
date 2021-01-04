@@ -71,10 +71,12 @@ double OffScoring::scorePutatives(set<long> offs, gRNA* onseq)
 				std::vector<std::string> ind_multi = S.Msplit(curmultis[j], ',');
 				myoff.chromscaff = std::stoi(ind_multi[0]);
 				myoff.position = stol(ind_multi[1]);
-				myoff.on_score = stod(ind_multi[3]);
+				myoff.on_score = stod(ind_multi[5]);
 
 				// concatenate the base sequence and the tail and add it to the sequence:
-				std::string the_tailseq;
+				
+				//std::string the_tailseq;
+				/*
 				if (ind_multi[2].find('+') != string::npos) 
 				{
 					the_tailseq = ind_multi[2].substr(0, ind_multi[2].find('+'));
@@ -83,9 +85,10 @@ double OffScoring::scorePutatives(set<long> offs, gRNA* onseq)
 				{
 					the_tailseq = ind_multi[2].substr(0, ind_multi[2].find('-'));
 				}
-
+				*/
 				
-				myoff.sequence = the_tailseq + c_base_seq;
+				myoff.sequence = ind_multi[2] + c_base_seq + ind_multi[3];
+				//myoff.sequence = the_tailseq + c_base_seq;
 				
 				// Check to make sure that the putative off target is not a self-match:
 				if (myoff.sequence != onseq->get_sequence()) 
