@@ -3,7 +3,7 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 3/16/18.
-//  Copyright © 2018 University of Tennessee. All rights reserved.
+//  Copyright ï¿½ 2018 University of Tennessee. All rights reserved.
 //
 
 #include "pch.h"
@@ -21,9 +21,6 @@
 #include <math.h>
 #include <chrono>
 #include <iomanip>
-#include <cstring>
-#include <string.h>
-#include <limits.h>
 
 using namespace std;
 char* r;

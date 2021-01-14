@@ -46,6 +46,7 @@ vector<string> split(string s, const string delimiter)
 int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
 	string seed = string(argv[0]);
+	
 	for (int i = seed.size(); i < sequence_length; i++)
 	{
 		seed = seed + "|";
@@ -54,13 +55,17 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName)
 	seeds += string(argv[0]);
 	vector<string> chroms = split(string(argv[1]), ",");
 	vector<string> locs = split(string(argv[2]), ",");
-	vector<string> tails = split(string(argv[3]), ",");
-	vector<string> scores = split(string(argv[4]), ",");
+	vector<string> three = split(string(argv[3]), ",");
+	vector<string> five = split(string(argv[4]), ",");
+	vector<string> pam = split(string(argv[5]), ",");
+	vector<string> scores = split(string(argv[6]), ",");
 	vector<string> multi;
+	
 	for (int i = 0; i < chroms.size(); i++)
 	{
-		multi.push_back(chroms[i] + "," + locs[i] + "," + tails[i] + "," + scores[i]);
+		multi.push_back(chroms[i] + "," + locs[i] + "," + five[i] + "," + three[i] + "," + pam[i] + "," + scores[i]);
 	}
+	
 	multi_locs_global.push_back(multi);
 	return 0;
 }
@@ -135,7 +140,7 @@ void csprRef::processMultis(string dbfile)
 	int rc;
 	
 	rc = sqlite3_open(dbfile.c_str(), &db);
-	string sql = "SELECT seed, chromosome, location, tail, score FROM 'REPEATS';";
+	string sql = "SELECT seed, chromosome, location, three, five, pam, score FROM 'REPEATS';";
 	rc = sqlite3_exec(db, sql.c_str(), callback, 0, &zErrMsg);
 
 	RefTargets += seeds;

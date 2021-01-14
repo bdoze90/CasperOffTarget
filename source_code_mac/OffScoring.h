@@ -3,10 +3,9 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 5/29/18.
-//  Copyright © 2018 University of Tennessee. All rights reserved.
+//  Copyright � 2018 University of Tennessee. All rights reserved.
 //
 
-using namespace std;
 
 #ifndef OffScoring_h
 #define OffScoring_h
@@ -23,6 +22,8 @@ using namespace std;
 #include "FileOp.h"
 #include <algorithm>
 #include <sstream>
+
+using namespace std;
 
 class OffScoring {
 public:
@@ -91,13 +92,13 @@ private:
 	void fillHsumatrix(string cspr_file, string casper_file) 
 	{
 		ifstream file;
-		string endo_name = cspr_file.substr(cspr_file.find_last_of("/\\") + 1, cspr_file.size());
+		string endo_name = cspr_file.substr(cspr_file.find_last_of('\\') + 1, cspr_file.size());
 		endo_name = endo_name.substr(0, endo_name.find('.'));
 		endo_name = endo_name.substr(endo_name.find('_')+1, endo_name.size());
 		file.open(casper_file);
 		string str = "";
 		int i = 0;
-		
+		cout << endo_name << endl;
 		while (getline(file, str)) 
 		{
 			if (str.find("MATRIX-" + endo_name) != string::npos)
