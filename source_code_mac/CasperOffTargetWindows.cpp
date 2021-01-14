@@ -36,10 +36,10 @@ vector<string> split(string strToSplit, char delimeter)
 }
 
 //int argc, const char * argv[]
-int main(int argc, const char * argv[]) {
+int main() {
 	
 	//argv: query file, cspr file, db file, output file, CASPERinfo, num_mismatches, threshold, detailed ouptut (T/F), avg output (T/F)
-	//vector<string> argv = {"EXE", "C:\\Users\\Tfry\\Desktop\\New_OT\\temp_uncomp.txt", "C:\\Users\\Tfry\\Desktop\\New_OT\\ath_asCas12.cspr", "C:\\Users\\Tfry\\Desktop\\New_OT\\ath_asCas12_repeats.db", "C:\\Users\\Tfry\\Desktop\\New_OT\\output.txt", "C:\\Users\\Tfry\\Desktop\\CASPERinfo", "5", "0.05", "TRUE", "FALSE"};
+	vector<string> argv = {"EXE", "C:\\Users\\Tfry\\Desktop\\New_OT\\temp_uncomp.txt", "C:\\Users\\Tfry\\Desktop\\New_OT\\baccoa_spCas9.cspr", "C:\\Users\\Tfry\\Desktop\\New_OT\\baccoa_spCas9_repeats.db", "C:\\Users\\Tfry\\Desktop\\New_OT\\output.txt", "C:\\Users\\Tfry\\Desktop\\CASPERinfo", "5", "0.05", "TRUE", "FALSE"};
 	//Convert all input into string objects:
 	string query_file = string(argv[1]);
 	string cspr_reference = string(argv[2]);
@@ -73,14 +73,14 @@ int main(int argc, const char * argv[]) {
 		if (str.find(endo_name + ';') != string::npos)
 		{
 			vector<string> data = split(str, ';');
-			seed_length = stoi(string(data[2]));
-			sequence_length = stoi(string(data[3]));
+			seed_length = stoi(string(data[3]));
+			sequence_length = seed_length + stoi(string(data[2])) + stoi(string(data[4]));
 			break;
 		}
 	}
 	file.close();
 	cout << "Running off-target analysis for: " << cspr_reference << "\n";
-
+	
 	// Object for running actual off-target algorithm:
 	
 	OnTargets otr;

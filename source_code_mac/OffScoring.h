@@ -3,9 +3,10 @@
 //  CasperOffTarget
 //
 //  Created by Brian Mendoza on 5/29/18.
-//  Copyright ï¿½ 2018 University of Tennessee. All rights reserved.
+//  Copyright © 2018 University of Tennessee. All rights reserved.
 //
 
+using namespace std;
 
 #ifndef OffScoring_h
 #define OffScoring_h
@@ -22,8 +23,6 @@
 #include "FileOp.h"
 #include <algorithm>
 #include <sstream>
-
-using namespace std;
 
 class OffScoring {
 public:
@@ -98,7 +97,6 @@ private:
 		file.open(casper_file);
 		string str = "";
 		int i = 0;
-		cout << endo_name << endl;
 		while (getline(file, str)) 
 		{
 			if (str.find("MATRIX-" + endo_name) != string::npos)
