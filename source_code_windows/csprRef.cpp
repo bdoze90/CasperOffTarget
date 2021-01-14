@@ -45,13 +45,6 @@ vector<string> split(string s, const string delimiter)
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
-	string seed = string(argv[0]);
-	
-	for (int i = seed.size(); i < sequence_length; i++)
-	{
-		seed = seed + "|";
-	}
-
 	seeds += string(argv[0]);
 	vector<string> chroms = split(string(argv[1]), ",");
 	vector<string> locs = split(string(argv[2]), ",");
@@ -61,11 +54,22 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName)
 	vector<string> scores = split(string(argv[6]), ",");
 	vector<string> multi;
 	
+	//fill three and five
+	for (int i = 0; i < chroms.size(); i++)
+	{
+		if (three.size() != chroms.size())
+		{
+			three.push_back("");
+		}
+		if (five.size() != chroms.size())
+		{
+			five.push_back("");
+		}
+	}
 	for (int i = 0; i < chroms.size(); i++)
 	{
 		multi.push_back(chroms[i] + "," + locs[i] + "," + five[i] + "," + three[i] + "," + pam[i] + "," + scores[i]);
 	}
-	
 	multi_locs_global.push_back(multi);
 	return 0;
 }
@@ -75,7 +79,6 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName)
  * parses this string into appropriate containers for easier access in the OnTargets class. */
 void csprRef::LoadcsprFile(string cspr, string dbfile, int seq_l) 
 {
-	
 	long chromCounter = 0;
 	bool first = true;
 	sequence_length = seq_l;
@@ -120,7 +123,7 @@ void csprRef::LoadcsprFile(string cspr, string dbfile, int seq_l)
 		}
 		else 
 		{
-			vector<string> target = Msplit(line, ';');  //Split up the line
+			vector<string> target = Msplit(line, ',');  //Split up the line
 			Locs.push_back(stol(target[0]));  //Add compressed location to Locs vector
 			Scores.push_back(stoi(target[3]));  //Add decompressed score to Scores vector
 			RefTargets += target[1];  //Add the sequence to the long sequence string

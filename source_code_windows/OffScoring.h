@@ -97,7 +97,6 @@ private:
 		file.open(casper_file);
 		string str = "";
 		int i = 0;
-		cout << endo_name << endl;
 		while (getline(file, str)) 
 		{
 			if (str.find("MATRIX-" + endo_name) != string::npos)
