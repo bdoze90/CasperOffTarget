@@ -137,6 +137,7 @@ void OnTargets::run_off_algorithm(int thr)
 	*/
 
 	//multi process
+	
 	while ((base.size() - i) / thr > 0) 
 	{
 		std::cout << "Percentage of sequences scored: " << (double(i) / double(base.size())) * 100 << "%" << std::endl;
